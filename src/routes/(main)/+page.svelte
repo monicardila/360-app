@@ -1,4 +1,20 @@
-<h1>Welcome to SvelteKit</h1>
-<p class="bg-red-500">
-	Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
-</p>
+<h1>---------Pagina informativa 1</h1>
+<div class="bg-blue-200 h-screen"></div>
+
+<body>
+	<div>
+		<!-- gif intro -->
+	</div>
+	<div>
+		<!-- video con mensaje a la derecha -->
+	</div>
+	<div>
+		<!-- texto publico objetivo -->
+	</div>
+	<div>
+		<!-- ventana categoria -->
+	</div>
+	<div>
+		<!-- referentes -->
+	</div>
+</body>
