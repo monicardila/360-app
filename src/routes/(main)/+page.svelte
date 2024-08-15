@@ -1,4 +1,4 @@
-<h1>---------Pagina informativa 1</h1>
+<h1>---------Pagina INFO 1</h1>
 <div class="bg-blue-200 h-screen"></div>
 
 <body>
