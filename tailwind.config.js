@@ -2,7 +2,40 @@
 export default {
 	content: ["./src/**/*.{html,js,svelte,ts}"],
 	theme: {
-		extend: {},
+		container: {
+			padding: {
+				DEFAULT: "15px",
+			},
+		},
+		screens: {
+			sm: "640px",
+			md: "768px",
+			lg: "960px",
+			xl: "1200px",
+		},
+		fontFamily: {
+			primary: "Hanken Grotesk",
+			secondary: "Roboto",
+		},
+		backgroundImage: {
+			imgMain: "url(src/assets/imgMain.jpg)",
+		},
+		extend: {
+			colors: {
+				primary: {
+					DEFAULT: "#007B7F",
+					hover: "#00A3A3",
+				},
+				secondary: {
+					DEFAULT: "#002F6C",
+					hover: "#1E90FF",
+				},
+				accent: {
+					DEFAULT: "#1A1A1A",
+					hover: "#3e3a5e",
+				},
+			},
+		},
 	},
 	plugins: [],
 };
