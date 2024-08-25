@@ -18,7 +18,9 @@ export default {
 			secondary: "Roboto",
 		},
 		backgroundImage: {
-			imgMain: "url(src/assets/imgMain.jpg)",
+			fondoMain: "url(src/assets/fondoMain.png)",
+			// imagen prueba reportes provisional
+			barrasReportes: "url(src/assets/barrasReportes.jpg)",
 		},
 		extend: {
 			colors: {

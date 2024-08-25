@@ -27,13 +27,20 @@
 				<i class="ri-menu-3-fill text-2xl"></i>
 			</div>
 			<ul
-				class="fixed w-full h-0 p-0 bg-secondary text-white overflow-hidden border-t top-[90px] left-0 right-0 flex flex-col gap-4 lg:relative lg:flex-row lf:p-0 lg:top-0 lg:boder-none lg:h-full transition-all duration-300 font-primary"
+				class="fixed w-full h-0 p-0 bg-white text-primary overflow-hidden border-t top-[90px] left-0 right-0 flex flex-col gap-4 lg:relative lg:flex-row lf:p-0 lg:top-0 lg:boder-none lg:h-full transition-all duration-300 font-primary"
 				id="nav_menu"
 			>
 				<li><a href="../"> Inicio</a></li>
-				<li><a href="a"> Planes</a></li>
-				<li><a href="about-us"> Nosotros</a></li>
+				<li><a href="#subscription"> Planes</a></li>
 				<li><a href="contact"> Contacto</a></li>
+				<li>
+					<a
+						class=" bg-primary text-white px-2 transition-all duration-300 rounded-[8px] flex items-center gap-2 hover:bg-secondary hover:text-white"
+						href="app/login"
+					>
+						Ingresar</a
+					>
+				</li>
 			</ul>
 		</nav>
 	</div>
@@ -78,10 +85,10 @@
 					<div class="h3 my-6 text-white">Paginas</div>
 					<ul class="text-lg flex flex-col gap-4 mb-4">
 						<li>
-							<a href="a" class="text-lg">Nosotros</a>
+							<a href="about-us" class="text-lg">Nosotros</a>
 						</li>
 						<li>
-							<a href="a" class="text-lg">Contacto</a>
+							<a href="contact" class="text-lg">Contacto</a>
 						</li>
 						<li>
 							<a href="a" class="text-lg">Testimonios</a>

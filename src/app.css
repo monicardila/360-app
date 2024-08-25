@@ -31,7 +31,7 @@ h3 {
 }
 
 .btn {
-	@apply h-[75px] px-[30px] transition-all duration-300 text-white rounded-[18px] flex items-center gap-2;
+	@apply h-[44px] px-[30px] transition-all duration-300 text-white rounded-[18px] flex items-center gap-2;
 }
 
 .btn-primary {
