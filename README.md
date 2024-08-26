@@ -1,38 +1,63 @@
-# create-svelte
+# TRES60 🚀
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+**TRES60** es una aplicación web diseñada para facilitar la gestión de múltiples tareas en un solo lugar. Ofrece funciones como control de roles de usuario, generación de facturas, contacto directo con proveedores, control de ventas, gestión de stock, empleados y aspectos contables. La aplicación está construida utilizando **Svelte**, **HTML**, **CSS** y **Tailwind CSS**.
 
-## Creating a project
+## 🚧 Requisitos Previos
 
-If you're seeing this, you've probably already done this step. Congrats!
+Antes de poder ejecutar el proyecto, asegúrate de tener instalados los siguientes componentes:
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+1. **Node.js** (versión 20 o superior) 🌐  
+   Puedes descargar e instalar Node.js desde su [página oficial](https://nodejs.org/).
 
-# create a new project in my-app
-npm create svelte@latest my-app
+2. **pnpm** 📦  
+   pnpm es un gestor de paquetes rápido y eficiente. Para instalar pnpm, ejecuta el siguiente comando en tu terminal:
+
+    ```bash
+    npm install -g pnpm
+    ```
+
+## 🚀 Instalación y Ejecución
+
+Sigue estos pasos para clonar y ejecutar la aplicación en tu entorno local:
+
+1. **Clona el repositorio** 🌀:
+
+    ```bash
+    git clone https://github.com/tuusuario/TRES60.git
+    cd TRES60
+    ```
+
+2. **Instala las dependencias** 📥:
+
+    ```bash
+    pnpm install
+    ```
+
+3. **Inicia el servidor de desarrollo** 🖥️:
+
+    ```bash
+    pnpm dev
+    ```
+
+## 📁 Estructura del Proyecto
+
+```plaintext
+TRES60/
+├── public/          # Archivos públicos, como imágenes y fuentes
+├── src/             # Código fuente de la aplicación
+│   ├── lib/         # Componentes reutilizables
+│   ├── routes/      # Rutas y páginas principales
+│   ├── styles/      # Archivos de estilo (CSS/Tailwind)
+│   └── +page.svelte # Archivo principal de la página de inicio
+├── package.json     # Dependencias y scripts del proyecto
+└── tailwind.config.js # Configuración de Tailwind CSS
 ```
 
-## Developing
+## ✨ Características
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+-   **Gestión de usuarios** 👥
+-   **Control de ventas y stock** 📊
+-   **Integración con proveedores** 🛒
+-   **Generación de informes y facturas** 🧾
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## 🤝 Contribuciones
