@@ -1,2 +1,2 @@
 <!-- pagina principal poner encabezado del lado izquierdo como discord  -->
-pagina inicio
+pagina inicio, explora las otras vistas

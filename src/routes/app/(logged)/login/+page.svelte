@@ -34,7 +34,7 @@
 			</form>
 			<div class="flex py-10 items-center justify-center">
 				<a
-					href="dashboard"
+					href="../app"
 					class="text-sm text-white font-bold px-20 py-4 bg-secondary rounded-xl font-secondary hover:bg-primary hover:text-white"
 					>INGRESAR
 				</a>

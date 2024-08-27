@@ -23,8 +23,8 @@ Sigue estos pasos para clonar y ejecutar la aplicación en tu entorno local:
 1. **Clona el repositorio** 🌀:
 
     ```bash
-    git clone https://github.com/tuusuario/TRES60.git
-    cd TRES60
+    git clone https://github.com/monicardila/360-app/tree/wip
+    cd 360-app
     ```
 
 2. **Instala las dependencias** 📥:
@@ -59,5 +59,3 @@ TRES60/
 -   **Control de ventas y stock** 📊
 -   **Integración con proveedores** 🛒
 -   **Generación de informes y facturas** 🧾
-
-## 🤝 Contribuciones

@@ -30,13 +30,13 @@
 				class="fixed w-full h-0 p-0 bg-white text-primary overflow-hidden border-t top-[90px] left-0 right-0 flex flex-col gap-4 lg:relative lg:flex-row lf:p-0 lg:top-0 lg:boder-none lg:h-full transition-all duration-300 font-primary"
 				id="nav_menu"
 			>
-				<li><a href="../"> Principal</a></li>
-				<li><a href="cashier"> Caja</a></li>
-				<li><a href="clients"> Clientes</a></li>
-				<li><a href="suppliers"> Proveedores</a></li>
-				<li><a href="products"> Productos</a></li>
-				<li><a href="reports"> Reportes</a></li>
-				<li><a href="help"> Ayuda</a></li>
+				<li><a href="/app/">Principal</a></li>
+				<li><a href="/app/cashier">Caja</a></li>
+				<li><a href="/app/clients">Clientes</a></li>
+				<li><a href="/app/suppliers">Proveedores</a></li>
+				<li><a href="/app/products">Productos</a></li>
+				<li><a href="/app/reports">Reportes</a></li>
+				<li><a href="/app/help">Ayuda</a></li>
 
 				<li>
 					<a
