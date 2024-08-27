@@ -20,6 +20,12 @@ Antes de poder ejecutar el proyecto, asegúrate de tener instalados los siguient
 
 Sigue estos pasos para clonar y ejecutar la aplicación en tu entorno local:
 
+### 📂 Repositorio
+
+Puedes acceder al código fuente en la rama `wip` de mi repositorio de GitHub:
+
+[Repositorio en GitHub](https://github.com/monicardila/360-app/tree/wip)
+
 1. **Clona el repositorio** 🌀:
 
     ```bash
