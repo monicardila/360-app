@@ -1,12 +1,12 @@
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
 	<div
-		class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
+		class="relative md:h-[680px] md:w-[440px] flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
 	>
-		<div class="flex flex-col justify-center p-8 md:p-14">
-			<span class=" text-primary text-center py-8 font-bold"
+		<div class="flex flex-col justify-center p-8 md:p-4">
+			<span class=" text-primary text-center pt-2 pb-20 font-bold"
 				><i class="ri-signal-tower-fill text-6xl"></i></span
 			>
-			<form>
+			<form class="px-6">
 				<label class="block">
 					<span class="block mb-2 text-sm font-bold">Email</span>
 					<input
@@ -24,6 +24,7 @@
 						type="password"
 						class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
 						name="password"
+						placeholder="********"
 						id="password"
 						required
 					/>

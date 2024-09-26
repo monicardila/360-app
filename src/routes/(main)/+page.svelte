@@ -9,12 +9,12 @@
 			>
 				<!-- text -->
 				<div
-					class="imgMain__text w-[567px] flex flex-col mx-auto items-center text-center"
+					class="imgMain__text w-[567px] flex flex-col mx-auto items-center text-center aspect-square shadow-xl rounded-md bg-transparent backdrop-blur-sm py-4 lg:pt-8"
 				>
-					<h1 class="h1 font-primary text-black font-extrabold mb-4">
-						TRES60 tu aliado de confianza
+					<h1 class="h1 mt-8 font-primary text-black font-extrabold">
+						TRES60 tu <br /> aliado de <br /> confianza
 					</h1>
-					<p class="mb-8 font-primary fon">
+					<p class="mb-8 mt-4 font-secondary w-[400px]">
 						Nuestro intuitivo sistema de gestión de inventario le
 						ayuda a optimizar sus operaciones, reducir costos y
 						tomar decisiones basadas en datos.
@@ -35,27 +35,30 @@
 
 	<!-- video con mensaje a la derecha -->
 	<section
-		class="bg-slate-100 p-4 xl:h-screen h-[780px] lg:[1000px] md:h-[950px] items-center justify-center"
+		class="bg-slate-100 p-4 xl:h-screen h-[780px] lg:[1000px] md:h-[950px] items-center justify-center mx-4"
 	>
 		<div
-			class=" flex flex-col xl:flex-row items-center justify-center md:h-screen"
+			class=" flex flex-col xl:flex-row items-center justify-center md:h-screen mx-4"
 		>
 			<div
-				class="font-primary text-lg flex flex-1 items-center justify-center mt-10 lg:mr-10 xl:max-w-lg xl:w-full"
+				class="font-secondary text-lg flex flex-1 items-center justify-center mt-10 lg:mr-10 xl:max-w-lg xl:w-full"
 			>
 				<div>
 					<h1
-						class="font-primary text-4xl text-left mt-4 mb-8 lg:my-10 md:text-5xl"
+						class="font-secondary font-bold text-4xl text-left mt-4 mb-8 lg:mb-20 md:text-4xl"
 					>
 						Simplifica la Gestión y Aumenta tu Productividad
 					</h1>
-					Bienvenido a TRES60, la plataforma diseñada para revolucionar
-					la forma en que manejas tu negocio. Con TRES60, podrás centralizar
-					todas las operaciones esenciales, desde el control de inventario
-					hasta la gestión contable, en un solo lugar. Descubre cómo nuestra
-					aplicación puede simplificar tus tareas diarias, automatizar
-					procesos y brindarte un control total de tu negocio. Mira este
-					video para conocer más...
+					<p class="text-sm md:text-lg">
+						Bienvenido a TRES60, la plataforma diseñada para
+						revolucionar la forma en que manejas tu negocio. Con
+						TRES60, podrás centralizar todas las operaciones
+						esenciales, desde el control de inventario hasta la
+						gestión contable, en un solo lugar. Descubre cómo
+						nuestra aplicación puede simplificar tus tareas diarias,
+						automatizar procesos y brindarte un control total de tu
+						negocio. Mira este video para conocer más...
+					</p>
 				</div>
 			</div>
 			<div
@@ -79,10 +82,10 @@
 	<!-- ventana principales leer documentacion svelte -->
 	<figure class="h-screen bg-slate-200">
 		<div
-			class="container mx-auto text-justify items-center text-lg font-primary pt-10"
+			class="container mx-auto text-left items-center text-lg font-secondary pt-10"
 		>
-			<h2 class="py-4 text-4xl xl:mb-14">Descubre mas...</h2>
-			<p>
+			<h2 class="py-4 text-4xl xl:mb-14 font-bold">Descubre mas...</h2>
+			<p class="mx-4 mt-10 text-sm md:text-lg">
 				En TRES60, nuestro objetivo es claro: ayudarte a optimizar la
 				gestión de tu negocio de manera eficiente y efectiva. Con
 				nuestra plataforma, tendrás acceso a herramientas avanzadas que
@@ -137,7 +140,7 @@
 	<!-- referentes, deslizante hacia los lados con comentarios sin img -->
 
 	<!-- planes de pago, tres contenedores  -->
-	<div class="planes__pago h-screen bg-slate-50 pt-20" id="subscription">
+	<div class="planes__pago h-screen bg-slate-50 pt-44" id="subscription">
 		<div
 			class="container mx-auto flex lg:flex-row justify-between items-center"
 		>
@@ -275,14 +278,40 @@
 						</tr>
 						<tr class="text-primary border-t-2">
 							<td></td>
-							<td class="text-left pl-20">100.000</td>
-							<td class="text-left pl-20">200.000</td>
-							<td class="text-left pl-20">300.000</td>
+							<td class=" mr-30 pl-20">100.000</td>
+							<td class=" mr-30 pl-20">200.000</td>
+							<td class=" mr-30 pl-20">300.000</td>
 						</tr>
 					</tbody>
 				</table>
-				<button class="mt-10 btn btn-primary">Adquirir plan</button>
+				<div class="flex justify-end text-lg">
+					<button class="mt-10 btn btn-primary">Adquirir plan</button>
+				</div>
 			</div>
 		</div>
 	</div>
+	<!-- testimonials -->
+
+	<section class="testimonials mt-[80px] xl:mt[200px] relative z-20">
+		<div
+			class="testimonial__bg container mx-auto bg-accent rounded-[70px] px-6"
+		>
+			<!-- slider -->
+			<div class="w-full">
+				<div class="testimonial__slider swiper h-[400px]">
+					<div class="swiper-wrapper">
+						<!-- slides -->
+						<div class="swiper-slide">
+							<!-- item -->
+							<div
+								class="testimonial__item w-fuill max-w-[370px] h-[340px] bg-white"
+							>
+								item
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </body>
