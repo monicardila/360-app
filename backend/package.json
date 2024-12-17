@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend service for the TRES60 inventory management application, providing APIs for user roles, invoices, suppliers, products, reports, and database interaction using Express.js Prisma, and PostgreSQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node src/utils/seed.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monicardila/360-app/commits/wip/"
+  },
+  "author": "Monica Ardila",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.0.1"
+  }
+}

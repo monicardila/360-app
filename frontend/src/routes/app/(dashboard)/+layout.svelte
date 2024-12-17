@@ -39,6 +39,9 @@
 </script>
 
 <!-- aside -->
+
+ <!-- OPTIMIZAR EL CODIGO -->
+  
 <div class=" m-0 p-0 box-border flex">
 	<div class="body bg-[#dbe2f4] flex">
 		<div class=" items-center w-full min-h-full mr-4">

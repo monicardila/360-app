@@ -40,6 +40,8 @@
 		tablas emparejadas con las de descarga del excel, con celdas bloquedas
 	</p>
 	<p>los reportes muestran posibles de todo el anio</p>
+	<h2 class="text-red-400">Kardex</h2>
+	<p>realizar intefaz</p>
 	<h2 class="text-red-400">informativa</h2>
 	<p>tarjetas de recomendacion</p>
 	<p>video app</p>

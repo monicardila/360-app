@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Employees {
+  id    Int     @id @default(autoincrement())
+  identification_card String @unique
+  rol  Role @default(USER)
+  name String @unique
+  phone String @unique
+  email String @unique
+  salary Decimal @db.Decimal(10,2)
+  bank_account_number String @unique
+  branch_store_id Int
+  status Boolean @default(true)
+  branch_store    BranchStore @relation(fields: [branch_store_id], references: [id])
+  orders Orders[]
+  customer_invoice Customer_invoice[]
+  supplier_invoice Supplier_invoices[]
+}
+
+enum Role{
+  USER
+  ADMIN
+}
+
+model Supplier{
+  id Int @id @default(autoincrement())
+  nit String @unique
+  name String @unique
+  contact_name String
+  phone String @unique
+  email String @unique
+  address String @unique
+  status   Boolean   @default(true)
+  deactivatedAt DateTime? // Fecha de desactivación
+  products Products[]
+  orders Orders[]
+  supplier_invoices Supplier_invoices[]
+}
+
+model Supplier_invoices{
+  id Int @id @default(autoincrement())
+  branch_store_id Int
+  branch_store    BranchStore @relation(fields: [branch_store_id], references: [id])
+  phone String
+  invoice_date DateTime @default(now())
+  employee_name String? @default("Caja")
+  employee Employees? @relation(fields: [employee_name], references: [name], onDelete: SetNull)
+  supplier_nit String
+  supplier Supplier @relation(fields: [supplier_nit], references: [nit])
+  invoice_content_supplier Invoice_content_supplier[]
+  total_price Decimal @db.Decimal(10,2)
+  vat Decimal @db.Decimal(5,2) // Ejemplo: 19.00 para un IVA del 19%
+  discount Decimal @db.Decimal(10,2) @default(0) // Ejemplo: 5000.00 como descuento aplicado
+  amount_paid Decimal @db.Decimal(10,2)
+  payment_method PaymentMethod @default(EFECTIVO)
+  payment_status Payment_status @default(PAGADA)
+}
+
+model Invoice_content_supplier{
+  id Int @id @default(autoincrement())
+  supplier_invoice_id Int
+  supplier_invoices Supplier_invoices @relation(fields: [supplier_invoice_id],references: [id], onDelete: Cascade)  
+  product_name String
+  products Products @relation(fields: [product_name],references: [name])
+  quantity Int @default(1)
+  invoice_detail String?
+  unit_price Decimal@db.Decimal(10,2)
+  total_price Decimal @db.Decimal(10,2)
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?    @default("Producto")
+  parentId    Int?       // null -> principal
+  parent      Category?  @relation("Subcategories", fields: [parentId], references: [id])
+  children    Category[] @relation("Subcategories")
+  products    Products[] @relation("CategoryToProducts")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  status   Boolean   @default(true)
+}
+
+model Products {
+  id             Int       @id @default(autoincrement())
+  supplier_id    Int?      @default(1)
+  supplier       Supplier? @relation(fields: [supplier_id], references: [id], onDelete: SetNull)
+  categoryId     Int
+  category       Category  @relation("CategoryToProducts", fields: [categoryId], references: [id])
+  name           String    @unique
+  description    String?
+  price          Decimal   @db.Decimal(10, 2)
+  stock          Int       @default(1)
+  status         Boolean   @default(true)
+  deactivatedAt DateTime? // Fecha de desactivación
+  orders         Orders[]
+  invoice_content_customer Invoice_content_customer[]
+  invoice_content_supplier Invoice_content_supplier[]
+}
+
+
+model Orders{
+  id Int @id @default(autoincrement())
+  order_date DateTime @default(now())
+  supplier_nit String
+  supplier Supplier @relation(fields: [supplier_nit], references: [nit])
+  employees_identification_card String
+  employees Employees @relation(fields: [employees_identification_card], references: [identification_card], onDelete: Cascade)
+  product_name String
+  products Products @relation(fields: [product_name],references: [name])
+  delivery_status Delivery_status @default(BORRADOR)
+}
+
+model Customers {
+  id Int @id @default(autoincrement())
+  identification_card String @unique
+  customer_invoice Customer_invoice[] // con una consulta para ver el historial
+}
+
+model Customer_invoice {
+  id Int @id @default(autoincrement())
+  branch_store_id Int
+  branch_store    BranchStore @relation(fields: [branch_store_id], references: [id])
+  phone String
+  invoice_date DateTime @default(now())
+  employee_name String
+  employee Employees @relation(fields: [employee_name], references: [name])
+  customer_identification_card String
+  customer Customers @relation(fields: [customer_identification_card], references: [identification_card], onDelete: Cascade)
+  invoice_content_customer Invoice_content_customer[]
+  total_price Decimal @db.Decimal(10,2)
+  vat Decimal @db.Decimal(5,2) // Ejemplo: 19.00 para un IVA del 19%
+  discount Decimal @db.Decimal(10,2) @default(0) // Ejemplo: 5000.00 como descuento aplicado
+  amount_paid Decimal @db.Decimal(10,2)
+  payment_method PaymentMethod @default(EFECTIVO)
+  payment_status Payment_status @default(PAGADA)
+}
+
+model Invoice_content_customer{
+  id Int @id @default(autoincrement())
+  customer_invoice_id Int
+  customer_invoice Customer_invoice @relation(fields: [customer_invoice_id], references: [id], onDelete: Cascade)
+  product_name String
+  products Products @relation(fields: [product_name], references: [name])
+  quantity Int @default(1)
+  invoice_detail String?
+  unit_price Decimal@db.Decimal(10,2)
+  total_price Decimal @db.Decimal(10,2)
+}
+
+enum PaymentMethod{
+  EFECTIVO
+  TARJETA_CREDITO
+  TRANSFERENCIA
+  OTRA
+}
+
+enum Payment_status{
+  PAGADA
+  PENDIENTE
+  CANCELADA
+}
+
+enum Delivery_status{
+  APROBADA
+  RECHAZADA
+  RECIBIDA
+  BORRADOR
+  EN_ESPERA
+}
+
+model BranchStore {
+  id              Int       @id @default(autoincrement())
+  name            String    @unique @default("Principal")
+  address         String @unique
+  manager_name    String
+  number_of_employees Int
+  status Boolean @default(true)
+  deactivatedAt DateTime? // Fecha de desactivación
+  employees       Employees[]
+  supplier_invoices Supplier_invoices[]
+  customer_invoice Customer_invoice[]
+}
+
