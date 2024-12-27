@@ -1,6 +1,8 @@
 <!-- pagina principal poner encabezado del lado izquierdo como discord  -->
 <div class=" ">
 	ESTA SERA LA MEJOR APLICACION DE INVENTARIOS ONLINE
+	<h2>Barra</h2>
+	<p>CAMBIAR</p>
 	<h2 class="text-red-400">dashboard</h2>
 	<p>funcionalidad</p>
 	<p>Calendario, con notas, dashboard</p>
@@ -9,6 +11,7 @@
 		opciones de promociones para productos con fecha de caducidad con con
 		pocas ventas
 	</p>
+	<p>cambiar tamanio</p>
 	<h2 class="text-red-400">caja</h2>
 	<p>funcionalidad</p>
 	<p>generacion QR y barras</p>
@@ -20,6 +23,8 @@
 	<p>funcionalidad</p>
 	<p>tablas</p>
 	<p>consultas</p>
+	<p>barra navegacion estatica</p>
+	<p>que la lista tenga scroll</p>
 	<h2 class="text-red-400">proveedores</h2>
 	<p>funcionalidad</p>
 	<p>tablas</p>
@@ -68,3 +73,25 @@
 	<p>en la nube</p>
 	<p>POS</p>
 </div>
+<!-- <script>
+	import { auth } from './authStore';
+  
+	let role;
+  
+	$: role = $auth.role; // Obtiene el rol del usuario actual.
+  </script>
+  
+  {#if role === 'admin'}
+	<p>Bienvenido al panel de administración</p>
+	<a href="/admin">Ir al panel de admin</a>
+  {/if}
+  
+  {#if role === 'user'}
+	<p>Bienvenido a tu área de usuario</p>
+	<a href="/dashboard">Ir al dashboard</a>
+  {/if}
+  
+  {#if !role}
+	<p>Por favor, inicia sesión.</p>
+	<a href="/login">Iniciar sesión</a>
+  {/if} -->

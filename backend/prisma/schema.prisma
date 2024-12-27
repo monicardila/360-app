@@ -195,3 +195,25 @@ model BranchStore {
   customer_invoice Customer_invoice[]
 }
 
+model Companies{
+ id Int @id @default(autoincrement())
+ name String
+ brand String
+ email String @unique
+ security_code String @unique
+ password String @unique
+ created_at DateTime @default(now())
+ users Users[]
+}
+
+model Users{
+  id Int @id @default(autoincrement())
+  company_id Int?
+  company Companies? @relation(fields: [company_id], references: [id])
+  name String 
+  email String @unique
+  password String
+  role String @default("user")
+  brand String
+  createdAt DateTime @default(now())
+}

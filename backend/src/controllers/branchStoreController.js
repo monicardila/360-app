@@ -109,7 +109,7 @@ const branchStoreControllers = {
       res.status(500).json({ error: "Error activating branch Store" });
     }
   },
-
+  // http://localhost:3000/api/v1/branchStore/status?status=true
   async findStatus(req, res) {
     try {
       const { status } = req.query;

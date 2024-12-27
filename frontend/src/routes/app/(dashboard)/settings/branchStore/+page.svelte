@@ -1,66 +1,71 @@
 <script>
 	import { onMount } from "svelte";
 	import {
-		products,
-		loadProducts,
+		branch_store,
+		loadBranchStores,
 		loading,
 		error,
-	} from "../../../../stores/models";
+	} from "../../../../../stores/models";
 
 	onMount(() => {
-		console.log("Calling loadProducts...");
-		loadProducts();
+		console.log("Calling load branch store...");
+		loadBranchStores();
 	});
 </script>
 
 <!-- th: columns, tr:cells -->
 {#if $loading}
 	<p>Loading data...</p>
-{:else if $products && $products.length > 0}
+{:else if $branch_store && $branch_store.length > 0}
 	<section>
-		<h2>PRODUCTS</h2>
+		<h2>BRANCH STORES</h2>
 		<table
 			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
 		>
 			<thead>
 				<tr class="bg-gray-100">
 					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2">Supplier</th>
-					<th class="border border-gray-300 px-4 pt-2">Name</th>
-					<th class="border border-gray-300 px-4 py-2">Category</th>
-					<th class="border border-gray-300 px-4 py-2">Description</th
+					<th class="border border-gray-300 px-4 py-2">Name</th>
+					<th class="border border-gray-300 px-4 pt-2">Address</th>
+					<th class="border border-gray-300 px-4 py-2"
+						>Manager name</th
 					>
-					<th class="border border-gray-300 px-4 py-2">Price</th>
-					<th class="border border-gray-300 px-4 py-2">Stock</th>
+					<th class="border border-gray-300 px-4 py-2"
+						>Number of employees</th
+					>
 					<th class="border border-gray-300 px-4 py-2">Status</th>
+					<th class="border border-gray-300 px-4 py-2">Stock</th>
+					<th class="border border-gray-300 px-4 py-2"
+						>Deactivate at</th
+					>
 				</tr>
 			</thead>
 			<tbody>
-				{#each $products as product}
+				{#each $branch_store as branch}
 					<tr class="hover:bg-gray-50">
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.id}</td
+							>{branch.id}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.supplier_id}</td
+							>{branch.name}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.name}</td
+							>{branch.address}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.category}</td
+							>{branch.manager_name}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.description}</td
+							>{branch.description}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.price}</td
+							>{branch.number_of_employees}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.stock}</td
+							>{branch.status}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.status}</td
+							>{branch.deactivatedAt}</td
 						>
 					</tr>
 				{/each}
@@ -71,5 +76,5 @@
 {:else if $error}
 	<p class="text-red-400">{$error}</p>
 {:else}
-	<p>No products found.</p>
+	<p>No branch store found.</p>
 {/if}

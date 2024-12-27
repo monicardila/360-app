@@ -105,14 +105,15 @@ main()
 
 // order -- creation
 
-// branch_store
-// employees
-// supplier
+// principal -> *
+// branch_store *
+// employees *
+// supplier *
 // categories
-// products
-// orders
+// products *
+// orders *
 // supplier_invoices
-// invoice_content_customer
-// customer
+// invoice_content_supplier
+// customer *
 // customer_invoice
 // invoice_content_customer

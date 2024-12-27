@@ -11,6 +11,7 @@ const categoryControllers = {
       res.status(500).json({ error: "Error finding category" });
     }
   },
+  //FOCUS
   async getById(req, res) {
     try {
       const { id } = req.params;

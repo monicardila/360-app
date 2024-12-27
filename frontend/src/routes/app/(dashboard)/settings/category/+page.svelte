@@ -1,66 +1,55 @@
 <script>
 	import { onMount } from "svelte";
 	import {
-		products,
-		loadProducts,
+		categories,
+		loadCategory,
 		loading,
 		error,
-	} from "../../../../stores/models";
+	} from "../../../../../stores/models";
 
 	onMount(() => {
 		console.log("Calling loadProducts...");
-		loadProducts();
+		loadCategory();
 	});
 </script>
 
 <!-- th: columns, tr:cells -->
 {#if $loading}
 	<p>Loading data...</p>
-{:else if $products && $products.length > 0}
+{:else if $categories && $categories.length > 0}
 	<section>
-		<h2>PRODUCTS</h2>
+		<h2>CATEGORIES</h2>
 		<table
 			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
 		>
 			<thead>
 				<tr class="bg-gray-100">
 					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2">Supplier</th>
-					<th class="border border-gray-300 px-4 pt-2">Name</th>
-					<th class="border border-gray-300 px-4 py-2">Category</th>
-					<th class="border border-gray-300 px-4 py-2">Description</th
+					<th class="border border-gray-300 px-4 py-2">Name</th>
+					<th class="border border-gray-300 px-4 pt-2">Description</th
 					>
-					<th class="border border-gray-300 px-4 py-2">Price</th>
-					<th class="border border-gray-300 px-4 py-2">Stock</th>
+					<th class="border border-gray-300 px-4 py-2">Parent id</th>
+
 					<th class="border border-gray-300 px-4 py-2">Status</th>
 				</tr>
 			</thead>
 			<tbody>
-				{#each $products as product}
+				{#each $categories as category}
 					<tr class="hover:bg-gray-50">
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.id}</td
+							>{category.id}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.supplier_id}</td
+							>{category.name}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.name}</td
+							>{category.description}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.category}</td
+							>{category.parentId}</td
 						>
 						<td class="border border-gray-300 px-4 py-2"
-							>{product.description}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{product.price}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{product.stock}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{product.status}</td
+							>{category.status}</td
 						>
 					</tr>
 				{/each}
@@ -71,5 +60,5 @@
 {:else if $error}
 	<p class="text-red-400">{$error}</p>
 {:else}
-	<p>No products found.</p>
+	<p>No categories found.</p>
 {/if}
