@@ -104,7 +104,7 @@ model Products {
   description    String?
   price          Decimal   @db.Decimal(10, 2)
   stock          Int       @default(1)
-  status         Boolean   @default(true)
+  status         Boolean  
   deactivatedAt DateTime? // Fecha de desactivación
   orders         Orders[]
   invoice_content_customer Invoice_content_customer[]

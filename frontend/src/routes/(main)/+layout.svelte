@@ -109,9 +109,7 @@
 					</ul>
 				</div>
 				<div class="footer__item font-primary">
-					<div
-						class="h3 my-4 text-white font-bold text-base font-extrabold"
-					>
+					<div class="h3 my-4 text-white text-base font-extrabold">
 						Servicios
 					</div>
 					<ul class=" flex flex-col gap-2 mb-2">
@@ -128,9 +126,7 @@
 					</ul>
 				</div>
 				<div class="footer__item font-primary">
-					<div
-						class="h3 my-4 text-white font-bold text-base font-extrabold"
-					>
+					<div class="h3 my-4 text-white text-base font-extrabold">
 						Ubicacion
 					</div>
 					<ul class=" flex flex-col gap-2 mb-2">

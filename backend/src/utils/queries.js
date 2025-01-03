@@ -1,13 +1,18 @@
 const prisma = require("./prismaClient");
 
 const queries = {
-  findMany: async (model, options = {}) => {
+  findAll: async (model, options = {}) => {
     return await prisma[model].findMany(options);
   },
   findById: async (model, id, includeOptions = {}) => {
     return await prisma[model].findUnique({
       where: { id },
       include: includeOptions, // By default, it includes nothing
+    });
+  },
+  findByName: async (model, name = {}) => {
+    return await prisma[model].findUnique({
+      where: { name },
     });
   },
   create: async (model, data) => {
@@ -35,7 +40,12 @@ const queries = {
     });
   },
   findStatus: async (model, status) => {
-    return await prisma[model].findMany({ where: { status } }); // // Prisma expects a boolean here
+    console.log(`Querying ${model} with status:`, status);
+
+    const query = status !== null ? { where: { status } } : {};
+    const result = await prisma[model].findMany(query);
+    console.log(`Results for status ${status}:`, result);
+    return result;
   },
 };
 

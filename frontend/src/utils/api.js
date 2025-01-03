@@ -1,4 +1,5 @@
 import axios from "axios";
+import { error } from "../stores/shared";
 
 const apiClient = axios.create({
 	baseURL: "http://localhost:3000/api/v1",
@@ -162,9 +163,38 @@ export default {
 	countProducts: () => {
 		return apiClient.get(`/products/count`);
 	},
-	statusProducts: (status) => {
-		return apiClient.get(`/products/status?status=${status}`);
+	// statusProducts: async (status) => {
+	// 	if (typeof status !== "boolean") {
+	// 		throw new Error("Status must be a boolean API");
+	// 	}
+
+	// 	try {
+	// 		const response = await apiClient.get("/products/status", {
+	// 			status,
+	// 		});
+	// 		if (response.status !== 200) {
+	// 			throw new Error(`API error: ${response.statusText}`);
+	// 		}
+	// 		return response.data;
+	// 	} catch (error) {
+	// 		console.error("API call failed:", error);
+	// 		throw error;
+	// 	}
+	// },
+
+	statusProducts: async (status) => {
+		try {
+			const response = await apiClient.get(
+				`/products/status?status=${status}`
+			);
+			console.log(`API`, response);
+			return response;
+		} catch (error) {
+			console.error("API call failed:", error);
+			throw error;
+		}
 	},
+
 	getAllProducts: async () => {
 		try {
 			const response = await apiClient.get(`/products`);
@@ -175,12 +205,21 @@ export default {
 			throw error;
 		}
 	},
+	getByNameProducts: (name) => {
+		return apiClient.get(`/products/name/${name}`);
+	},
+
 	getByIdProducts: (id, options = {}) => {
-		const { includeSupplier } = options;
-		const queryString = includeSupplier
-			? `?includeSupplier=${includeSupplier}`
-			: "";
-		return apiClient.get(`/products/${id}${queryString}`);
+		try {
+			const { includeSupplier } = options;
+			const queryString = includeSupplier
+				? `?includeSupplier=${includeSupplier}`
+				: "";
+			return apiClient.get(`/products/${id}${queryString}`);
+		} catch (error) {
+			console.error("Error fetching products from api.js:", error);
+			throw error;
+		}
 	},
 	createProducts: (data) => {
 		return apiClient.post(`/products`, data);

@@ -73,13 +73,16 @@
 				</label>
 				<label class="py-4 block">
 					<span class="mb-2 text-sm font-bold">Rol</span>
-					<input
+					<select
+						name="role"
+						id=""
 						bind:value={role}
-						type="text"
 						class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
-						placeholder="USER / ADMIN"
 						required
-					/>
+					>
+						<option value="user">USER</option>
+						<option value="admin">ADMIN</option>
+					</select>
 				</label>
 				<label class="block py-4 text-sm">
 					<span class="mb-2 text-sm font-bold">Email</span>

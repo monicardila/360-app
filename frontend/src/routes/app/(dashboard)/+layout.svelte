@@ -4,7 +4,7 @@
 	const Menus = [
 		{
 			title: "Dashboard",
-			link: "./",
+			link: "/app",
 			icon: "ri-calendar-todo-line  ",
 		},
 		{
@@ -65,7 +65,7 @@
 
 <div class=" flex text-lg">
 	<div
-		class=" {`${isOpen ? ' w-52' : 'w-18'} duration-300  border border-black h-screen relative bg-slate-100 p-4`}"
+		class=" {`${isOpen ? ' w-52' : 'w-18'} duration-300   relative bg-white p-4 z-30`}"
 	>
 		<div class="flex">
 			<i class="ri-user-4-line bg-slate-200 rounded-full p-2"></i>
@@ -116,9 +116,35 @@
 		{/each}
 	</div>
 
-	<!-- content -->
 	<div class="m-0 flex-1 w-full overflow-auto">
-		<main class=" p-10 h-screen">
+		<!-- nav_bar -->
+		<div
+			class="fixed w-full top-0 right-0 left-0 h-[90px] shadow-md z-20 bg-white inline-flex"
+		>
+			<div
+				class=" absolute top-1/2 transform -translate-y-1/2 flex items-center right-10 space-x-20"
+			>
+				<!-- search general -->
+				<div class="relative w-80 h-10 mx-auto mt-8 mb-10 flex">
+					<i
+						class="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-sky-600"
+					></i>
+					<input
+						class="border border-gray-400 text-gray-600 rounded-full w-full h-full pl-10 pr-6 outline-none"
+						type="text"
+						placeholder="Search by view"
+					/>
+				</div>
+				<!-- user -->
+				<div class=" w-auto h-10 flex">
+					<i class="ri-user-4-line text-black rounded bg-white"></i>
+					<h4 class="mx-2">Monica Ardila</h4>
+				</div>
+			</div>
+		</div>
+
+		<!-- content -->
+		<main class=" p-10 h-screen bg-slate-100">
 			<slot />
 		</main>
 	</div>

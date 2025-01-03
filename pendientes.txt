@@ -1,0 +1,141 @@
+	ESTA SERA LA MEJOR APLICACION DE INVENTARIOS ONLINE >
+	<h2 class="text-red-400">dashboard</h2>
+	<p>funcionalidad</p>
+	<p>Calendario, con notas, dashboard</p>
+	<p>metodos para impulsar las ventas</p>
+	<p>
+		opciones de promociones para productos con fecha de caducidad con con
+		pocas ventas
+	</p>
+	<p>cambiar tamanio</p>
+	<h2 class="text-red-400">caja</h2>
+	<p>funcionalidad</p>
+	<p>generacion QR y barras</p>
+	<p>Formato facturacion</p>
+	<p>administrar el flujo de efectivo</p>
+	<p>debe tener la mejor interfaz de caja registradora</p>
+	<p>consultas</p>
+	<h2 class="text-red-400">clientes</h2>
+	<p>funcionalidad</p>
+	<p>consultas</p>
+	<p>barra navegacion estatica</p>
+	<p>que la lista tenga scroll</p>
+	<h2 class="text-red-400">proveedores</h2>
+	<p>funcionalidad</p>
+	<p>Monitoreo pedidos proveedores</p>
+	<p>consultas</p>
+	<h2 class="text-red-400">productos</h2>
+	<p>funcionalidad</p>
+	<p>descripcion de los productos en ventana flotante</p>
+	<p>consultas</p>
+	<p>gestor de precios, administrador, fechas de caducidad,</p>
+	<h2 class="text-red-400">reportes</h2>
+	<p>funcionalidad</p>
+	<p>envio de multiples correos personalizados</p>
+	<p>genera correspondencia para los empleados en el pago de la nomina</p>
+	<p>
+		tablas emparejadas con las de descarga del excel, con celdas bloquedas
+	</p>
+	<p>los reportes muestran posibles de todo el anio</p>
+	<h2 class="text-red-400">Kardex</h2>
+	<p>realizar intefaz</p>
+	<h2 class="text-red-400">informativa</h2>
+	<p>tarjetas de recomendacion</p>
+	<p>video app</p>
+	<p>contenedor caracateristicas app</p>
+	<p>planes de pago</p>
+	<p>redesociales</p>
+	<h2 class="text-red-400">contacto</h2>
+	<p>funcionalidad correo</p>
+	<p>mejorar interfaz</p>
+	<h2 class="text-red-400">singin</h2>
+	<p>funcionalidad</p>
+	<p>mejorar la interfaz</p>
+	<h2 class="text-red-400">complejas</h2>
+	<p>icono de carga</p>
+	<p>mensajes de error flotantes</p>
+	<p>chat flotante con ayuda</p>
+	<p>ia para operaciones futuras</p>
+	<p>guardado automatico</p>
+	<p>iconos de usuario, informacion de usuario</p>
+	<p>administrador de roles, zonas de la app desabilitadas</p>
+	<p>posibilidad de subir imagenes</p>
+	<p>vista modificable de la base de datos</p>
+	<p>en la nube</p>
+	<p>POS</p>
+</div>
+<!-- <script>
+	import { auth } from './authStore';
+  
+	let role;
+  
+	$: role = $auth.role; // Obtiene el rol del usuario actual.
+  </script>
+  
+  {#if role === 'admin'}
+	<p>Bienvenido al panel de administración</p>
+	<a href="/admin">Ir al panel de admin</a>
+  {/if}
+  
+  {#if role === 'user'}
+	<p>Bienvenido a tu área de usuario</p>
+	<a href="/dashboard">Ir al dashboard</a>
+  {/if}
+  
+  {#if !role}
+	<p>Por favor, inicia sesión.</p>
+	<a href="/login">Iniciar sesión</a>
+  {/if} -->
+
+
+--------------- codigo para desplazamiento horizontal: 
+<script>
+  import { onMount } from 'svelte';
+  let isMobile = false;
+
+  const checkScreenSize = () => {
+    isMobile = window.innerWidth <= 768; // Define el breakpoint para "mobile"
+  };
+
+  onMount(() => {
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  });
+</script>
+
+<div class="relative planes__pago h-screen bg-slate-100 pt-44">
+  {#if isMobile}
+    <!-- Vista móvil: Carrusel desplazable horizontal -->
+    <div class="flex overflow-x-auto space-x-4 px-4">
+      <div class="w-80 h-[600px] p-6 rounded-lg bg-white flex-shrink-0">
+        <!-- Contenido del primer plan -->
+        <h4>Plan 1</h4>
+      </div>
+      <div class="w-80 h-[600px] p-6 rounded-lg bg-white flex-shrink-0">
+        <!-- Contenido del segundo plan -->
+        <h4>Plan 2</h4>
+      </div>
+      <div class="w-80 h-[600px] p-6 rounded-lg bg-white flex-shrink-0">
+        <!-- Contenido del tercer plan -->
+        <h4>Plan 3</h4>
+      </div>
+    </div>
+  {:else}
+    <!-- Vista de escritorio: Tres contenedores en paralelo -->
+    <div class="flex justify-center space-x-4">
+      <div class="w-80 h-[600px] p-6 rounded-lg bg-white">
+        <!-- Contenido del primer plan -->
+        <h4>Plan 1</h4>
+      </div>
+      <div class="w-80 h-[600px] p-6 rounded-lg bg-white">
+        <!-- Contenido del segundo plan -->
+        <h4>Plan 2</h4>
+      </div>
+      <div class="w-80 h-[600px] p-6 rounded-lg bg-white">
+        <!-- Contenido del tercer plan -->
+        <h4>Plan 3</h4>
+      </div>
+    </div>
+  {/if}
+</div>

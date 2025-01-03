@@ -7,11 +7,22 @@ const queries = require("../utils/queries");
 const productsController = {
   async getAll(req, res) {
     try {
-      const products = await queries.findMany("products");
+      const products = await queries.findAll("products");
       res.status(200).send(products);
     } catch (error) {
       console.log(`Error finding products: ${error.message}`);
-      res.send(500).json({ error: "Error fetching products" });
+      res.send(500).json({ error: "Error fetching products CONTROLLER ALL" });
+    }
+  },
+
+  async create(req, res) {
+    try {
+      const data = req.body;
+      const products = await queries.create("products", data);
+      res.status(201).json(products);
+    } catch (error) {
+      console.log(`Error creating products: ${error.message}`);
+      res.status(500).json({ error: "Error creating products" });
     }
   },
 
@@ -32,20 +43,27 @@ const productsController = {
       res.status(200).send(products);
     } catch (error) {
       console.log(`Error fetching products: ${error.message}`);
+      res.status(500).json({ error: "Error fetching products CONTROLLER ID" });
+    }
+  },
+
+  async getByName(req, res) {
+    try {
+      const { name } = req.params;
+      if (!name) {
+        return res.status(400).json({ error: "Name parameter is required" });
+      }
+      const products = await queries.findByName("products", name);
+      if (!products) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      res.status(200).send(products);
+    } catch (error) {
+      console.log(`Error fetching products:${error.message}`);
       res.status(500).json({ error: "Error fetching products" });
     }
   },
 
-  async create(req, res) {
-    try {
-      const data = req.body;
-      const products = await queries.create("products", data);
-      res.status(201).json(products);
-    } catch (error) {
-      console.log(`Error creating products: ${error.message}`);
-      res.status(500).json({ error: "Error creating products" });
-    }
-  },
   async update(req, res) {
     try {
       const { id } = req.params;
@@ -113,11 +131,23 @@ const productsController = {
     }
   },
 
-  async findStatus(req, res) {
+  async getStatus(req, res) {
     try {
       const { status } = req.query;
-      const products = await queries.findStatus("products", status === "true");
-      res.status(200).json(products);
+
+      if (status !== undefined) {
+        const normalizedStatus =
+          status === "true" ? true : status === "false" ? false : null;
+        console.log("Normalized status CONTROLLER:", normalizedStatus);
+
+        const products = await queries.findStatus("products", normalizedStatus);
+        console.log("Products fetched by status:", products);
+
+        return res.status(200).send(products);
+      }
+
+      const products = await queries.findStatus("products", status);
+      return res.status(200).send(products);
     } catch (error) {
       console.log("Error fetching products by status:", error);
       res.status(500).json({ error: "Error fetching products by status" });

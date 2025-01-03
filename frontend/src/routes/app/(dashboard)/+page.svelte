@@ -1,97 +1,42 @@
-<!-- pagina principal poner encabezado del lado izquierdo como discord  -->
-<div class=" ">
-	ESTA SERA LA MEJOR APLICACION DE INVENTARIOS ONLINE
-	<h2>Barra</h2>
-	<p>CAMBIAR</p>
-	<h2 class="text-red-400">dashboard</h2>
-	<p>funcionalidad</p>
-	<p>Calendario, con notas, dashboard</p>
-	<p>metodos para impulsar las ventas</p>
-	<p>
-		opciones de promociones para productos con fecha de caducidad con con
-		pocas ventas
-	</p>
-	<p>cambiar tamanio</p>
-	<h2 class="text-red-400">caja</h2>
-	<p>funcionalidad</p>
-	<p>generacion QR y barras</p>
-	<p>Formato facturacion</p>
-	<p>administrar el flujo de efectivo</p>
-	<p>debe tener la mejor interfaz de caja registradora</p>
-	<p>consultas</p>
-	<h2 class="text-red-400">clientes</h2>
-	<p>funcionalidad</p>
-	<p>tablas</p>
-	<p>consultas</p>
-	<p>barra navegacion estatica</p>
-	<p>que la lista tenga scroll</p>
-	<h2 class="text-red-400">proveedores</h2>
-	<p>funcionalidad</p>
-	<p>tablas</p>
-	<p>Monitoreo pedidos proveedores</p>
-	<p>consultas</p>
-	<h2 class="text-red-400">productos</h2>
-	<p>funcionalidad</p>
-	<p>tablas</p>
-	<p>descripcion de los productos en ventana flotante</p>
-	<p>consultas</p>
-	<p>gestor de precios, administrador, fechas de caducidad,</p>
-	<h2 class="text-red-400">reportes</h2>
-	<p>funcionalidad</p>
-	<p>tablas</p>
-	<p>envio de multiples correos personalizados</p>
-	<p>genera correspondencia para los empleados en el pago de la nomina</p>
-	<p>
-		tablas emparejadas con las de descarga del excel, con celdas bloquedas
-	</p>
-	<p>los reportes muestran posibles de todo el anio</p>
-	<h2 class="text-red-400">Kardex</h2>
-	<p>realizar intefaz</p>
-	<h2 class="text-red-400">informativa</h2>
-	<p>tarjetas de recomendacion</p>
-	<p>video app</p>
-	<p>contenedor caracateristicas app</p>
-	<p>planes de pago</p>
-	<p>redesociales</p>
-	<h2 class="text-red-400">contacto</h2>
-	<p>funcionalidad correo</p>
-	<p>mejorar interfaz</p>
-	<h2 class="text-red-400">singin</h2>
-	<p>funcionalidad</p>
-	<p>mejorar la interfaz</p>
-	<h2 class="text-red-400">complejas</h2>
-	<p>icono de carga</p>
-	<p>mensajes de error flotantes</p>
-	<p>chat flotante con ayuda</p>
-	<p>ia para operaciones futuras</p>
-	<p class="text-green-600">menu desplegable izquierdo</p>
-	<p>guardado automatico</p>
-	<p>iconos de usuario, informacion de usuario</p>
-	<p>administrador ded roles, zonas de la app desabilitadas</p>
-	<p>posibilidad de subir imagenes</p>
-	<p>vista modificable de la base de datos</p>
-	<p>en la nube</p>
-	<p>POS</p>
+<script>
+	import Calendar from "../../../components/calendar.svelte";
+	import TaskList from "../../../components/TaskList.svelte";
+</script>
+
+<div class="flex flex-wrap justify-center items-center gap-4 p-4 mt-24">
+	<!-- Fila 1 -->
+	<div class="flex flex-wrap gap-4 justify-center w-full">
+		<div class="flex-1 min-w-[20%] h-48 bg-red-200 p-4"># sales</div>
+		<div class="flex-1 min-w-[20%] h-48 bg-red-200 p-4">
+			Best selling products
+		</div>
+		<div class="flex-1 min-w-[20%] h-48 bg-red-200 p-4">
+			Out of stock products
+		</div>
+		<div class="flex-1 min-w-[30%] h-48 bg-blue-500 p-4">User</div>
+	</div>
+
+	<!-- Fila 2 -->
+	<div class="flex flex-wrap gap-4 justify-center w-full">
+		<div class="flex-1 min-w-[40%] h-72 bg-red-200 p-4">graphic</div>
+		<div class="flex-1 min-w-[20%] h-72 bg-red-200 p-4">top</div>
+		<div class="flex-1 min-w-[30%] h-72 bg-blue-500 p-4">Calendar</div>
+	</div>
+
+	<!-- Fila 3 -->
+	<div class="flex flex-wrap gap-4 justify-center w-full">
+		<div class="flex-1 min-w-[20%] h-72 bg-red-200 p-4">suggestion</div>
+		<div class="flex-1 min-w-[20%] h-72 bg-red-200 p-4"># sales</div>
+		<div class="flex-1 min-w-[20%] h-72 bg-red-200 p-4">todo</div>
+		<div class="flex-1 min-w-[30%] h-72 bg-blue-500 p-4">branch</div>
+	</div>
 </div>
-<!-- <script>
-	import { auth } from './authStore';
-  
-	let role;
-  
-	$: role = $auth.role; // Obtiene el rol del usuario actual.
-  </script>
-  
-  {#if role === 'admin'}
-	<p>Bienvenido al panel de administración</p>
-	<a href="/admin">Ir al panel de admin</a>
-  {/if}
-  
-  {#if role === 'user'}
-	<p>Bienvenido a tu área de usuario</p>
-	<a href="/dashboard">Ir al dashboard</a>
-  {/if}
-  
-  {#if !role}
-	<p>Por favor, inicia sesión.</p>
-	<a href="/login">Iniciar sesión</a>
-  {/if} -->
+
+<!-- <div class="flex">
+		<div class="p-4 w-[400px] h-[400px] bg-gray-100 border border-black">
+			<Calendar />
+		</div>
+		<div class="relative w-96 mt-24">
+			<TaskList />
+		</div>
+	</div> -->

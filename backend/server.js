@@ -56,6 +56,11 @@ app.use("/app", authRouter);
 // Routes protected
 app.use("/app/protected", protectedRoutes);
 
+app.use((req, res, next) => {
+  console.log("Incoming request body:", req.body); // Revisa el cuerpo recibido
+  next();
+});
+
 app.use((req, res) => {
   res.status(404).send("Route not found");
 });
