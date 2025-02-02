@@ -1,0 +1,28 @@
+Título Principal:
+"Gestiona Todo en un Solo Lugar"
+
+Subtítulo del Main:
+"TRES60: Nuestro intuitivo sistema de gestión de inventario le ayuda a optimizar sus operaciones, reducir costos y tomar decisiones basadas en datos.
+
+Texto junto al Video Introductorio:
+"Bienvenido a TRES60, la plataforma diseñada para revolucionar la forma en que manejas tu negocio. Con TRES60, podrás centralizar todas las operaciones esenciales, desde el control de inventario hasta la gestión contable, en un solo lugar. Descubre cómo nuestra aplicación puede simplificar tus tareas diarias, automatizar procesos y brindarte un control total de tu negocio. Mira este video para conocer más."
+
+Texto sobre el Objetivo de la Aplicación:
+"En TRES60, nuestro objetivo es claro: ayudarte a optimizar la gestión de tu negocio de manera eficiente y efectiva. Con nuestra plataforma, tendrás acceso a herramientas avanzadas que te permitirán supervisar cada aspecto de tu operación. Desde la gestión de ventas hasta el seguimiento del stock, pasando por la administración de roles de usuario y la generación automática de pedidos a proveedores, TRES60 te ofrece todo lo que necesitas para llevar tu negocio al siguiente nivel. Simplifica, automatiza y controla con TRES60."
+
+Texto para Atrapar al Público:
+"¿Estás cansado de saltar entre diferentes sistemas para gestionar tu inventario, ventas y contabilidad? Con TRES60, puedes olvidarte de esa complicación. Nuestra plataforma todo en uno está diseñada para brindarte una experiencia fluida y centralizada, permitiéndote enfocarte en lo que realmente importa: hacer crecer tu negocio. Únete a la revolución del control de inventario con TRES60 y descubre cómo podemos ayudarte a transformar tu gestión diaria en un proceso ágil y eficiente."
+
+Descripción de Secciones:
+
+Clientes: "Gestiona tus relaciones con clientes de manera eficiente. Accede a un registro completo de tus clientes, historial de compras y preferencias, todo en un solo lugar."
+
+Proveedores: "Mantén un control directo y efectivo con tus proveedores. Desde la gestión de contactos hasta la generación automática de pedidos, TRES60 te facilita el proceso."
+
+Productos: "Supervisa y actualiza tu inventario en tiempo real. Agrega, edita y elimina productos con facilidad, asegurando que tu stock siempre esté bajo control."
+
+Reportes: "Genera informes detallados sobre cada aspecto de tu operación. Desde ventas hasta stock, obtén información clave que te ayudará a tomar decisiones informadas."
+
+Caja Registradora: "Gestiona las transacciones diarias con precisión. TRES60 te ofrece una solución sencilla para el manejo de ventas y pagos, asegurando un flujo de caja eficiente."
+
+Informes: "Accede a un resumen completo del estado de tu negocio. Con TRES60, puedes generar informes personalizados que te brinden una visión clara de tu rendimiento."
