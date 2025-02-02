@@ -10,6 +10,8 @@
 	let brand = "";
 	let error = null;
 
+	// ERROR EN ESTE ARCHIVO
+
 	async function register() {
 		if (password !== confirmPassword) {
 			error = "Password do not match";
@@ -17,13 +19,22 @@
 		}
 
 		try {
-			const response = await fetch("http://localhost:3000/app/register", {
-				method: "POST",
-				headers: {
-					"content-Type": "application/json",
+			const response = await fetch(
+				"http://localhost:3000/api/v1/auth/register",
+				{
+					method: "POST",
+					headers: {
+						"content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						name,
+						email,
+						password,
+						role,
+						brand,
+					}),
 				},
-				body: JSON.stringify({ name, email, password, role, brand }),
-			});
+			);
 
 			const data = await response.json();
 			console.log("Data: ", data);
@@ -32,7 +43,7 @@
 				throw new Error(data.error || "Registration failed");
 			} else if (response.ok) {
 				alert("Successfully register");
-				window.location.href = "/app/login";
+				window.location.href = "/app/auth/login";
 			}
 
 			setAuth(data.token, data.role);
@@ -115,7 +126,7 @@
 					/>
 				</label>
 				<a
-					href="/app/login"
+					href="/app/auth/login"
 					class=" text-sm text-emerald-700 hover:text-sky-600 hover:underline"
 					>Iniciar sesion</a
 				>

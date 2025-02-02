@@ -38,7 +38,7 @@
 				<li>
 					<a
 						class=" bg-primary text-white px-2 transition-all duration-300 rounded-[8px] flex items-center gap-2 hover:bg-secondary hover:text-white"
-						href="app/login"
+						href="app/auth/login"
 					>
 						Ingresar</a
 					>

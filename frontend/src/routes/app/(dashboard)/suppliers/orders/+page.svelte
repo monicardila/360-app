@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 	import { onMount } from "svelte";
 	import {
 		orders,
@@ -11,10 +11,10 @@
 		console.log("Calling orders...");
 		loadOrders();
 	});
-</script>
+</script> -->
 
 <!-- th: columns, tr:cells -->
-{#if $loading}
+<!-- {#if $loading}
 	<p>Loading data...</p>
 {:else if $orders && $orders.length > 0}
 	<section>
@@ -71,4 +71,6 @@
 	<p class="text-red-400">{$error}</p>
 {:else}
 	<p>No orders found.</p>
-{/if}
+{/if} -->
+
+<h1 class="mt-20">ACCESO SOLO USER</h1>

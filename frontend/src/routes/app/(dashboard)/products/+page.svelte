@@ -46,7 +46,7 @@
 				break;
 		}
 
-		console.log("Filters  operation COMPONENT:", operation);
+		console.log("Filters operation COMPONENT:", operation);
 		console.log("Filters filter COMPONENT:", filters);
 
 		await loadData("products", operation, filters);

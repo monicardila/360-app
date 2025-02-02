@@ -9,9 +9,9 @@ export const auth = writable({
 });
 
 export function setAuth(token, role) {
-	auth.set({ token, role });
+	auth.set({ isAuthenticated: true, token, role });
 }
 
 export function clearAuth() {
-	auth.set({ token: null, role: null });
+	auth.set({ isAuthenticated: false, token: null, role: null });
 }

@@ -214,6 +214,6 @@ model Users{
   email String @unique
   password String
   role String @default("user")
-  brand String
+  brand String?
   createdAt DateTime @default(now())
 }

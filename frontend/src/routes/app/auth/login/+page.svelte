@@ -1,5 +1,5 @@
 <script>
-	import { auth, setAuth } from "../../../../stores/authStores";
+	import { setAuth } from "../../../../stores/authStores";
 
 	let email = "";
 	let password = "";
@@ -8,18 +8,28 @@
 		e.preventDefault();
 
 		try {
-			const response = await fetch("http://localhost:3000/app/login", {
-				method: "POST",
-				headers: { "Content-Type": "application/JSON" },
-				body: JSON.stringify({ email, password }),
-			});
+			const response = await fetch(
+				"http://localhost:3000/api/v1/auth/login",
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ email, password }),
+					credentials: "include",
+				},
+			);
+
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(errorData.error || "Invalid credentials");
+			}
+
 			const data = await response.json();
 
 			if (response.ok) {
 				setAuth(data.token, data.role);
 				alert("Login successful");
 
-				window.location.href = "/app/";
+				window.location.href = "/app";
 			} else {
 				alert(data.error || "Invalid credentials  /login");
 			}
@@ -38,7 +48,7 @@
 			<span class="text-primary text-center py-8 font-bold">
 				<i class="ri-signal-tower-fill text-6xl"></i>
 			</span>
-			<form on:submit|preventDefault={handleLogin} class="block text-sm">
+			<form on:submit={handleLogin} class="block text-sm">
 				<label class="block py-4 text-sm">
 					<span class="mb-2 text-sm font-bold">Email</span>
 					<input
@@ -59,7 +69,7 @@
 					/>
 				</label>
 				<a
-					href="/app/register"
+					href="/app/auth/register"
 					class=" text-sm text-emerald-700 hover:text-sky-600 hover:underline"
 					>Registrate aqui</a
 				>
@@ -75,3 +85,26 @@
 		</div>
 	</div>
 </div>
+
+<!--   AUTENTICACION PARA ENTRAR A CIERTA VISTA
+<script>
+    import { auth, logout } from '../lib/stores/auth';
+    import { onMount } from 'svelte';
+
+    let user = null;
+
+    onMount(async () => {
+        auth.subscribe(({ token }) => {
+            if (!token) window.location.href = '/login'; // 🔹 Redirigir si no está logueado
+        });
+
+        const response = await fetch('http://localhost:3000/profile', {
+            headers: { Authorization: localStorage.getItem('token') }
+        });
+
+        user = await response.json();
+    });
+</script>
+
+<h1>Bienvenido {user?.email}</h1>
+<button on:click={logout}>Cerrar sesión</button>  -->
