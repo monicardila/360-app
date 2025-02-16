@@ -77,10 +77,11 @@ routerAuth.post("/login", async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: 'Contraseña incorrecta' });
+    if (!isMatch)
+      return res.status(401).json({ message: "Contraseña incorrecta" });
 
     const token = jwt.sign({ id: user.id, role: user.role }, SECRET_JWT_KEY, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
 
     ////////////////////
@@ -89,16 +90,21 @@ routerAuth.post("/login", async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Only HTTPS in production
-      sameSite: "lax",
-      // sameSite: "strict",
-      maxAge: 3600000,
+      secure: false, // Cambiar a false en localhost
+      //secure: process.env.NODE_ENV === "production", // solo en producción
+      sameSite: "Strict", // O "Lax", dependiendo de tu caso
+      maxAge: 24 * 60 * 60 * 1000, // 1 día
     });
 
-    res.json({ message: "Login successfully", rol: user.role });
+    // decodificar el token para acceder al role
+    const decodedToken = jwt.decode(token);
+    console.log("Role del token: ", decodedToken.role);
+    console.log("Role del token: ", token);
+
+    res.json({ message: "Login successfully", role: user.role, token: token });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({ error: "Error logging in AUTH.JS" }); // ERROR
+    res.status(500).json({ error: "Error logging in AUTH.JS" });
   }
 });
 

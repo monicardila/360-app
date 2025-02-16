@@ -1,76 +1,46 @@
-<!-- <script>
+<script>
 	import { onMount } from "svelte";
-	import {
-		orders,
-		loadOrders,
-		loading,
-		error,
-	} from "../../../../../stores/models";
+	import { loadData } from "../../../../../utils/models";
+	import { orders } from "../../../../../stores/models";
+	import SearchBar from "../../../../../components/SearchBar.svelte";
+	import Table from "../../../../../components/Table.svelte";
 
-	onMount(() => {
-		console.log("Calling orders...");
-		loadOrders();
+	let filters = { id: null, status: null, all: true };
+
+	const handleSearch = async (event) => {
+		filters = event.detail.filters;
+
+		if (filters.id) {
+			await loadData("orders", "byId", filters);
+		} else if (filters.status !== null && filters.status !== undefined) {
+			await loadData("orders", "byStatus", filters);
+		} else if (filters.name) {
+			await loadData("orders", "byName", filters);
+		} else {
+			await loadData("orders", "all", filters);
+		}
+	};
+
+	// Cargar productos al montar la vista
+	onMount(async () => {
+		await loadData("orders", "all", filters);
 	});
-</script> -->
 
-<!-- th: columns, tr:cells -->
-<!-- {#if $loading}
-	<p>Loading data...</p>
-{:else if $orders && $orders.length > 0}
-	<section>
-		<h2>ORDERS</h2>
-		<table
-			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
-		>
-			<thead>
-				<tr class="bg-gray-100">
-					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2">Order date</th>
-					<th class="border border-gray-300 px-4 pt-2"
-						>Supplier nit</th
-					>
-					<th class="border border-gray-300 px-4 py-2"
-						>Employee identification</th
-					>
-					<th class="border border-gray-300 px-4 py-2"
-						>Product name</th
-					>
-					<th class="border border-gray-300 px-4 py-2"
-						>Delivery status</th
-					>
-				</tr>
-			</thead>
-			<tbody>
-				{#each $orders as order}
-					<tr class="hover:bg-gray-50">
-						<td class="border border-gray-300 px-4 py-2"
-							>{order.id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{order.order_date}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{order.supplier_nit}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{order.employee_identification}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{order.product_name}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{order.delivery_status}</td
-						>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-		<ul></ul>
-	</section>
-{:else if $error}
-	<p class="text-red-400">{$error}</p>
-{:else}
-	<p>No orders found.</p>
-{/if} -->
+	// Definir columnas específicas para productos
+	const columns = [
+		"id",
+		"order_date",
+		"supplier_nit",
+		"employees_identification_card",
+		"product_name",
+		"delivery_status",
+	];
+</script>
 
-<h1 class="mt-20">ACCESO SOLO USER</h1>
+<h5 class="right-20 absolute mt-16 font-medium">Orders</h5>
+
+<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+<SearchBar bind:filters on:search={handleSearch} searchFields={["id"]} />
+
+<!-- Usar el componente Table con columnas y datos -->
+<Table {columns} data={$orders} />

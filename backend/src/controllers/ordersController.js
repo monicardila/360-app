@@ -11,7 +11,7 @@ const ordersController = {
         filterOptions.where = { delivery_status };
       }
 
-      const orders = await queries.findMany("orders", filterOptions);
+      const orders = await queries.findAll("orders", filterOptions);
 
       if (!orders || orders.length === 0) {
         return res

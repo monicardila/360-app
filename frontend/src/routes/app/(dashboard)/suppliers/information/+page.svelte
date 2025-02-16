@@ -1,82 +1,53 @@
 <script>
 	import { onMount } from "svelte";
-	import {
-		supplier,
-		loadSupplier,
-		loading,
-		error,
-	} from "../../../../../stores/models";
+	import { loadData } from "../../../../../utils/models";
+	import { supplier } from "../../../../../stores/models";
+	import SearchBar from "../../../../../components/SearchBar.svelte";
+	import Table from "../../../../../components/Table.svelte";
 
-	onMount(() => {
-		console.log("Calling load supplier...");
-		loadSupplier();
+	let filters = { id: null, status: null, all: true };
+
+	const handleSearch = async (event) => {
+		filters = event.detail.filters;
+
+		if (filters.id) {
+			await loadData("supplier", "byId", filters);
+		} else if (filters.status !== null && filters.status !== undefined) {
+			await loadData("supplier", "byStatus", filters);
+		} else if (filters.name) {
+			await loadData("supplier", "byName", filters);
+		} else {
+			await loadData("supplier", "all", filters);
+		}
+	};
+
+	// Cargar productos al montar la vista
+	onMount(async () => {
+		await loadData("supplier", "all", filters);
 	});
+
+	// Definir columnas específicas para productos
+	const columns = [
+		"id",
+		"nit",
+		"name",
+		"contact_name",
+		"phone",
+		"email",
+		"address",
+		"status",
+		"deactivateAt",
+	];
 </script>
 
-<!-- th: columns, tr:cells -->
-{#if $loading}
-	<p>Loading data...</p>
-{:else if $supplier && $supplier.length > 0}
-	<section>
-		<h2>SUPPLIERS</h2>
-		<table
-			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
-		>
-			<thead>
-				<tr class="bg-gray-100">
-					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2">Nit</th>
-					<th class="border border-gray-300 px-4 pt-2">Name</th>
-					<th class="border border-gray-300 px-4 py-2"
-						>Contact name</th
-					>
-					<th class="border border-gray-300 px-4 py-2">Email</th>
-					<th class="border border-gray-300 px-4 py-2">Phone</th>
-					<th class="border border-gray-300 px-4 py-2">Address</th>
-					<th class="border border-gray-300 px-4 py-2">Status</th>
-					<th class="border border-gray-300 px-4 py-2"
-						>Deactivated at</th
-					>
-				</tr>
-			</thead>
-			<tbody>
-				{#each $supplier as supplier}
-					<tr class="hover:bg-gray-50">
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.nit}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.name}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.contact_name}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.email}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.phone}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.address}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.status}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{supplier.deactivatedAt}</td
-						>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-		<ul></ul>
-	</section>
-{:else if $error}
-	<p class="text-red-400">{$error}</p>
-{:else}
-	<p>No suppliers found.</p>
-{/if}
+<h5 class="right-20 absolute mt-16 font-medium">Supplier</h5>
+
+<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+<SearchBar
+	bind:filters
+	on:search={handleSearch}
+	searchFields={["id", "status", "name"]}
+/>
+
+<!-- Usar el componente Table con columnas y datos -->
+<Table {columns} data={$supplier} />

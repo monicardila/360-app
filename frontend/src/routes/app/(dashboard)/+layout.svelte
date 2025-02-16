@@ -1,5 +1,26 @@
 <script>
 	let isOpen = false;
+	let openSubmenu = null;
+
+	const logout = async () => {
+		try {
+			const response = await fetch(
+				"http://localhost:3000/api/v1/auth/logout",
+				{
+					method: "POST",
+					credentials: "include",
+				},
+			);
+
+			if (response.ok) {
+				window.location.href = "/";
+			} else {
+				console.log("Logout failed", response);
+			}
+		} catch (error) {
+			console.log("Error during logout", error);
+		}
+	};
 
 	const Menus = [
 		{
@@ -23,7 +44,7 @@
 			icon: "ri-user-search-line  ",
 		},
 		{
-			title: "Supplier",
+			title: "Supplier .. v",
 			icon: "ri-bus-fill  ",
 			submenu: true,
 			submenuItems: [
@@ -35,7 +56,7 @@
 			],
 		},
 		{
-			title: "Reports",
+			title: "Reports .. v",
 			icon: "ri-folder-chart-line ",
 			submenu: true,
 			submenuItems: [
@@ -44,7 +65,7 @@
 			],
 		},
 		{
-			title: "Settings",
+			title: "Settings .. v",
 			icon: "ri-settings-3-fill",
 			submenu: true,
 			submenuItems: [
@@ -54,10 +75,14 @@
 			],
 		},
 		{ title: "help", link: "/app/help", icon: "ri-question-fill" },
-		{ title: "Logout", link: "../", icon: "ri-logout-box-line" },
+		{
+			title: "Logout",
+			link: "#",
+			icon: "ri-logout-box-line",
+			action: logout,
+		},
 	];
 
-	let openSubmenu = null;
 	const toggleSubmenu = (index) => {
 		openSubmenu = openSubmenu === index ? null : index;
 	};
@@ -65,7 +90,7 @@
 
 <div class=" flex text-lg">
 	<div
-		class=" {`${isOpen ? ' w-52' : 'w-18'} duration-300   relative bg-white p-4 z-30`}"
+		class=" {`${isOpen ? 'w-52' : 'w-18'} duration-300   relative bg-white p-4 z-30`}"
 	>
 		<div class="flex">
 			<i class="ri-user-4-line bg-slate-200 rounded-full p-2"></i>
@@ -90,9 +115,18 @@
 		>
 		{#each Menus as menu, index}
 			<div class={`relative top-8  ${isOpen ? "pb-4" : "pb-0"}`}>
+				<!--  menu.action
+    				  ? () => menu.action()  // Si `menu.action` existe, ejecuta esta función
+   					  : menu.submenu 
+					  ? () => toggleSubmenu(index)  // Si `menu.submenu` existe (y `menu.action` no existe), ejecuta esta función
+    				  : null  // Si ninguna de las dos condiciones anteriores es verdadera, no hace nada -->
 				<a
 					href={menu.link || "#"}
-					on:click={menu.submenu ? () => toggleSubmenu(index) : null}
+					on:click={menu.action
+						? () => menu.action()
+						: menu.submenu
+							? () => toggleSubmenu(index)
+							: null}
 					class={`block w-full hover:bg-slate-200 rounded-lg px-1 ${!isOpen && "pb-4"}`}
 				>
 					<i class={`pl-1 ${menu.icon}`}></i><span

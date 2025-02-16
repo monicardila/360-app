@@ -1,64 +1,54 @@
 <script>
 	import { onMount } from "svelte";
-	import {
-		categories,
-		loadCategory,
-		loading,
-		error,
-	} from "../../../../../stores/models";
+	import { loadData } from "../../../../../utils/models";
+	import { categories } from "../../../../../stores/models";
+	import SearchBar from "../../../../../components/SearchBar.svelte";
+	import Table from "../../../../../components/Table.svelte";
 
-	onMount(() => {
-		console.log("Calling loadProducts...");
-		loadCategory();
+	let filters = { id: null, status: null, all: true };
+
+	const handleSearch = async (event) => {
+		filters = event.detail.filters;
+
+		if (filters.id) {
+			await loadData("categories", "byId", filters);
+		} else if (filters.status !== null && filters.status !== undefined) {
+			await loadData("categories", "byStatus", filters);
+		} else if (filters.name) {
+			await loadData("categories", "byName", filters);
+		} else {
+			await loadData("categories", "all", filters);
+		}
+	};
+
+	// Cargar productos al montar la vista
+	onMount(async () => {
+		await loadData("categories", "all", filters);
 	});
+
+	// Definir columnas específicas para productos
+	const columns = [
+		"id",
+		"name",
+		"description",
+		"parentId",
+		"parent",
+		"children",
+		"products",
+		"createdAt",
+		"updatedAt",
+		"status",
+	];
 </script>
 
-<!-- th: columns, tr:cells -->
-{#if $loading}
-	<p>Loading data...</p>
-{:else if $categories && $categories.length > 0}
-	<section>
-		<h2>CATEGORIES</h2>
-		<table
-			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
-		>
-			<thead>
-				<tr class="bg-gray-100">
-					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2">Name</th>
-					<th class="border border-gray-300 px-4 pt-2">Description</th
-					>
-					<th class="border border-gray-300 px-4 py-2">Parent id</th>
+<h5 class="right-20 absolute mt-16 font-medium">Categories</h5>
 
-					<th class="border border-gray-300 px-4 py-2">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each $categories as category}
-					<tr class="hover:bg-gray-50">
-						<td class="border border-gray-300 px-4 py-2"
-							>{category.id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{category.name}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{category.description}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{category.parentId}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{category.status}</td
-						>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-		<ul></ul>
-	</section>
-{:else if $error}
-	<p class="text-red-400">{$error}</p>
-{:else}
-	<p>No categories found.</p>
-{/if}
+<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+<SearchBar
+	bind:filters
+	on:search={handleSearch}
+	searchFields={["id", "status"]}
+/>
+
+<!-- Usar el componente Table con columnas y datos -->
+<Table {columns} data={$categories} />

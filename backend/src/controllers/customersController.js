@@ -8,7 +8,7 @@ const queries = require("../utils/queries");
 const customersController = {
   async getAll(req, res) {
     try {
-      const customers = await queries.findMany("customers");
+      const customers = await queries.findAll("customers");
       res.status(200).json(customers);
     } catch (error) {
       console.log(`Error finding customers: ${error.message}`);

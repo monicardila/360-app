@@ -1,22 +1,26 @@
-FROM node:20-slim
+# Usa Node.js para construir la aplicación
+FROM node:20 AS build
 
 # Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia archivos del proyecto al contenedor
+# Copia los archivos de dependencias
 COPY package.json package-lock.json ./
 
-# Instala dependencias
+# Instala las dependencias
 RUN npm install
 
-# Copia los archivos del proyecto al contenedor
+# Copia el código fuente
 COPY . .
 
-# Compila Prisma
+# Construye la aplicación Svelte
 RUN npm run build
 
-# Expone el puerto donde correra el backend
-EXPOSE 5174
+# Usa una imagen de Nginx para servir el frontend
+FROM nginx:alpine
 
-# Comando de inicio para iniciar un servidor local que sirva la aplicación compilada
-CMD ["npm", "run", "preview"]
+# Copia los archivos generados en `build` a la carpeta de Nginx
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expone el puerto del frontend
+EXPOSE 80
