@@ -1,4 +1,3 @@
-const { orders } = require("../utils/prismaClient");
 const queries = require("../utils/queries");
 
 // info total
@@ -6,7 +5,7 @@ const queries = require("../utils/queries");
 const employeesController = {
   async getAll(req, res) {
     try {
-      const employees = await queries.findMany("employees");
+      const employees = await queries.findAll("employees");
       res.status(200).send(employees);
     } catch (error) {
       console.log(`Error finding employees: ${error.message}`);

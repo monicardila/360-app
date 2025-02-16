@@ -15,7 +15,7 @@ const supplierInvoicesController = {
         filterOptions.payment_status = payment_status;
       }
       // Searches only for records in the customer_invoice table that match the defined conditions.
-      const supplier_invoices = await queries.findMany("supplier_invoices", {
+      const supplier_invoices = await queries.findAll("supplier_invoices", {
         where: filterOptions,
       });
 

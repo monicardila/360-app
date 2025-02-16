@@ -6,7 +6,7 @@ const { PORT } = require("./config");
 const cookieParser = require("cookie-parser");
 const routerAuth = require("./src/routes/auth");
 const protectedRoutes = require("./src/routes/protectedRoutes");
-//const authenticate = require("./src/middleware/authenticate");
+const authenticate = require("./src/middleware/authenticate");
 
 const employeesRoutes = require("./src/routes/employeesRoutes");
 const supplierRoutes = require("./src/routes/supplierRoutes");

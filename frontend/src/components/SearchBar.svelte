@@ -1,103 +1,150 @@
 <script>
+	// Lo que hace SearchBar es emitir un evento con los filtros,
+	// y luego handleSearch debería llamar a loadData para actualizar employees
+
 	import { createEventDispatcher } from "svelte";
-	import { loading, error } from "../stores/shared";
+	import { loading } from "../stores/shared";
 
 	const dispatch = createEventDispatcher();
 
+	// SEGUIR PONIENDO LOS FILTROS DE LAS TABLAS DE PRISMA
 	export let filters = {
 		id: null,
 		status: null,
 		name: "",
-		all: null,
+		category: null,
+		price: null,
+		rol: null,
+		email: null,
+		salary: null,
+		bank_account_number: null,
+		branch_store_id: null,
+		nit: null,
+		contact_name: null,
+		address: null,
+		deactivateAt: null,
 	};
 
+	// Nueva prop para definir qué filtros mostrar en cada página
+	export let searchFields = ["id", "status", "name", "category", "price"];
+
 	const handleSearch = () => {
-		// object propagation (...) <- research on google
-		const processedFilters = {
-			id: filters.id ? Number(filters.id) : null,
-			status:
-				filters.status === "true"
-					? true
-					: filters.status === "false"
-						? false
-						: null,
-			name: filters.name || undefined,
-			all: filters.all !== undefined ? filters.all : null,
-		};
+		console.log("Filtros antes de procesar:", filters);
+		const processedFilters = {};
 
-		console.log(
-			"Processed filters being dispatched SEARCH_BAR:",
-			processedFilters,
-		);
-		console.log("SEARCH BAR type: ", typeof filters.status);
+		// Recorremos los filtros y eliminamos valores vacíos o nulos
+		for (const key in filters) {
+			if (filters[key] !== null && filters[key] !== "") {
+				if (key === "id" || key === "price") {
+					processedFilters[key] = Number(filters[key]); // Convertir números
+				} else if (key === "status") {
+					processedFilters[key] =
+						filters[key] === "true"
+							? true
+							: filters[key] === "false"
+								? false
+								: null;
+				} else {
+					processedFilters[key] = filters[key]; // Mantener otros valores
+				}
+			}
+		}
 
+		console.log("Processed filters:", processedFilters);
 		dispatch("search", { filters: processedFilters });
 	};
 	const handleClear = () => {
-		(filters.id = null), (filters.status = null), (filters.name = "");
+		for (const key in filters) {
+			filters[key] = null;
+		}
+		dispatch("search", { filters }); // Disparar evento con filtros vacíos
 	};
+
+	console.log("Filtros visibles:", searchFields);
 </script>
 
-<!-- Search bar -->
 <div
 	class="mt-24 m-auto flex items-center justify-center space-x-4 max-w-[1500px] py-4 pb-8 bg-white shadow-md rounded-t-lg"
 >
-	<div class="flex flex-col space-y-2 min-w-[15%]">
-		<label for="search-id" class="text-gray-700 font-medium">ID</label>
-		<input
-			type="number"
-			id="search-id"
-			bind:value={filters.id}
-			placeholder="Search by ID"
-			class="text-gray-600 rounded-xl w-44 p-2 h-full pl-10 outline-none bg-slate-100"
-		/>
-	</div>
-	<div class="flex flex-col space-y-2 min-w-[15%]">
-		<label for="search-status" class="text-gray-700 font-medium"
-			>Status</label
-		>
-		<select
-			id="search-status"
-			bind:value={filters.status}
-			class="text-gray-600 rounded-xl w-54 p-2 h-full pl-10 outline-none bg-slate-100"
-		>
-			<option value="">All</option>
-			<option value="true">Available</option>
-			<option value="false">Unavailable</option>
-		</select>
-	</div>
-	<div class="flex flex-col space-y-2 min-w-[15%]">
-		<label for="filters" class="text-gray-700 font-medium">Name</label>
-		<input
-			type="text"
-			id="search-id"
-			bind:value={filters.name}
-			placeholder="Search by ID"
-			class="text-gray-600 rounded-xl w-44 p-2 h-full pl-10 outline-none bg-slate-100"
-		/>
-	</div>
-	<div class="flex flex-col space-y-2 min-w-[15%]">
-		<label for="category" class="text-gray-700 font-medium">Category</label>
-		<select
-			id="category"
-			class="bg-slate-100 text-gray-600 rounded-xl w-54 p-2 h-full pl-10 px-6 outline-none"
-		>
-			<option value="">Food</option>
-			<option value="">Home</option>
-			<option value="">Health</option>
-			<option value="">Phones</option>
-		</select>
-	</div>
-	<div class="flex flex-col space-y-2 min-w-[15%]">
-		<label for="price" class="text-gray-700 font-medium">Price</label>
-		<select
-			id="price"
-			class="bg-slate-100 text-gray-600 rounded-xl w-54 p-2 h-full pl-10 outline-none"
-		>
-			<option value="">Greater</option>
-			<option value="">Lesser</option>
-		</select>
-	</div>
+	{#if searchFields.includes("id")}
+		<div class="flex flex-col space-y-2 min-w-[15%]">
+			<label for="search-id" class="text-gray-700 font-medium">ID</label>
+			<input
+				type="number"
+				id="search-id"
+				bind:value={filters.id}
+				placeholder="Search by ID"
+				class="text-gray-600 rounded-xl w-44 p-2 h-full pl-10 outline-none bg-slate-100"
+			/>
+		</div>
+	{/if}
+
+	{#if searchFields.includes("status")}
+		<div class="flex flex-col space-y-2 min-w-[15%]">
+			<label for="search-status" class="text-gray-700 font-medium"
+				>Status</label
+			>
+			<select
+				id="search-status"
+				bind:value={filters.status}
+				class="text-gray-600 rounded-xl w-54 p-2 h-full pl-10 outline-none bg-slate-100"
+			>
+				<option value="">All</option>
+				<option value="true">Available</option>
+				<option value="false">Unavailable</option>
+			</select>
+		</div>
+	{/if}
+
+	{#if searchFields.includes("name")}
+		<div class="flex flex-col space-y-2 min-w-[15%]">
+			<label for="search-name" class="text-gray-700 font-medium"
+				>Name</label
+			>
+			<input
+				type="text"
+				id="search-name"
+				bind:value={filters.name}
+				placeholder="Search by Name"
+				class="text-gray-600 rounded-xl w-52 p-2 h-full pl-10 outline-none bg-slate-100"
+			/>
+		</div>
+	{/if}
+
+	{#if searchFields.includes("category")}
+		<div class="flex flex-col space-y-2 min-w-[15%]">
+			<label for="category" class="text-gray-700 font-medium"
+				>Category</label
+			>
+			<select
+				id="category"
+				bind:value={filters.category}
+				class="bg-slate-100 text-gray-600 rounded-xl w-54 p-2 h-full pl-10 px-6 outline-none"
+			>
+				<option value="">All</option>
+				<option value="food">Food</option>
+				<option value="home">Home</option>
+				<option value="health">Health</option>
+				<option value="phones">Phones</option>
+			</select>
+		</div>
+	{/if}
+
+	{#if searchFields.includes("price")}
+		<div class="flex flex-col space-y-2 min-w-[15%]">
+			<label for="price" class="text-gray-700 font-medium">Price</label>
+			<select
+				id="price"
+				bind:value={filters.price}
+				class="bg-slate-100 text-gray-600 rounded-xl w-54 p-2 h-full pl-10 outline-none"
+			>
+				<option value="">All</option>
+				<option value="greater">Greater</option>
+				<option value="lesser">Lesser</option>
+			</select>
+		</div>
+	{/if}
+
 	<button
 		on:click={handleSearch}
 		class="border-2 border-slate-300 bg-cyan-600 text-white rounded-xl p-3 px-6 mt-8 font-medium"
@@ -109,193 +156,13 @@
 	<button
 		on:click={handleClear}
 		class="border-2 font-semibold border-slate-300 bg-red-300 text-white rounded-xl p-3 px-6 mt-8"
-		>Clean</button
 	>
+		Clean
+	</button>
 </div>
 
-<!-- search menu -->
-
-<!-- <script>
-
-	let filter = {id:"", status:"", }
-
-	let searchText = "";
-	let searchInput = "";
-
-	const handleClear = () => {
-		searchText = "";
-		loadProducts();
-		searchInput.focus();
-	};
-	const handleSearch = () => {
-		loadProductsById(searchText);
-	};
-</script> -->
-<!-- <div class="">
-	<input
-		bind:value={searchText}
-		bind:this={searchInput}
-		placeholder="Search by id"
-		class="border border-gray-400 text-gray-600 rounded-full w-36 p-4 h-full pl-10 pr-6 outline-none"
-		type="text"
-	/>
-	<button on:click={handleSearch} class="border border-black bg-green-300"
-		>Search</button
-	>
-	<button on:click={handleClear} class="border border-black bg-green-300"
-		>All products</button
-	>
-</div>
-
-{#if $loading}
-	<p>Loading...</p>
-{:else if $error}
-	<p>Error: {$error}</p>
-{:else if $products.length === 0}
-	<p>No products found</p>
-{:else}
-	<ul>
-		{#each $products as product}
-			<li>{product.id} - {product.name}</li>
-		{/each}
-	</ul>
-{/if} -->
-
-<!-- antes-------------------------- -->
-<!-- 
-import { loading, error } from "../stores/shared";
-import { products, customers, suppliers, branchStores, orders } from "../stores/models";
-import api from "../api";
-
-// Mapeo de tipos a stores y funciones
-const modelConfig = {
-  products: { store: products, fetcher: api.getByIdProducts },
-  customers: { store: customers, fetcher: api.getByIdCustomers },
-  suppliers: { store: suppliers, fetcher: api.getByIdSuppliers },
-  branchStores: { store: branchStores, fetcher: api.getByIdBranchStores },
-  orders: { store: orders, fetcher: api.getByIdOrders },
-  // Agrega más modelos aquí
-};
-
+<!--
+- Cuando el usuario escribe en el input o limpia los filtros en SearchBar.svelte, se ejecuta dispatch("search", { filters }).
+- La vista principal (employees.svelte) escucha el evento "search" y ejecuta handleSearch(event).
+- handleSearch recibe los filtros y decide qué datos cargar con loadData().
 -->
-
-<!-- componente:-----------------
-
-<script>
-  import { loadData, products } from "../stores/models";
-
-  let filters = { id: "", status: "", name: "" }; // Almacena los valores de los filtros
-  let operation = "all"; // Operación por defecto
-
-  const searchProducts = async () => {
-    // Determina el tipo de operación basado en el filtro elegido
-    if (filters.id) {
-      operation = "byId";
-    } else if (filters.status) {
-      operation = "byStatus";
-    } else if (filters.name) {
-      operation = "byName";
-    } else {
-      operation = "all"; // Si no hay filtros, carga todo
-    }
-
-    // Llama a la función genérica para cargar los datos
-    await loadData("products", operation, filters);
-  };
-</script>
-
-<div>
-  <input
-    bind:value={filters.id}
-    placeholder="Search by ID"
-    class="border p-2"
-  />
-  <input
-    bind:value={filters.status}
-    placeholder="Search by Status"
-    class="border p-2"
-  />
-  <input
-    bind:value={filters.name}
-    placeholder="Search by Name"
-    class="border p-2"
-  />
-  <button
-    on:click={searchProducts}
-    class="border p-2 bg-blue-500 text-white"
-  >
-    Search
-  </button>
-</div>
-
-<ul>
-  {#each $products as product}
-    <li>{product.id} - {product.name} ({product.status})</li>
-  {/each}
-</ul>
-
-
-models.js-------------------
-
-const modelConfig = {
-	products: {
-	  store: products,
-	  fetchers: {
-		all: api.getAllProducts,
-		byId: api.getByIdProducts,
-		byStatus: api.getStatusProducts, // Supongamos que esta existe
-		// Agrega más operaciones aquí si es necesario
-	  },
-	},
-	customers: {
-	  store: customers,
-	  fetchers: {
-		all: api.getAllCustomers,
-		byId: api.getByIdCustomers,
-		byStatus: api.getStatusCustomers, // Supongamos que esta existe
-	  },
-	},
-	suppliers: {
-	  store: suppliers,
-	  fetchers: {
-		all: api.getAllSuppliers,
-		byId: api.getByIdSuppliers,
-	  },
-	},
-	// Agrega más modelos aquí
-  };
-
-export async function loadData(type, operation = "all", filters = {}) {
-  try {
-    loading.set(true);
-    error.set(null);
-
-    // Verifica si el tipo existe en el mapa
-    const config = modelConfig[type];
-    if (!config) {
-      throw new Error(`Tipo de modelo no reconocido: ${type}`);
-    }
-
-    const { store, fetchers } = config;
-
-    // Verifica si la operación es válida
-    const fetcher = fetchers[operation];
-    if (!fetcher) {
-      throw new Error(`Operación no soportada: ${operation}`);
-    }
-
-    // Llama a la función del API con los filtros adecuados
-    const response = await fetcher(filters.id || filters);
-    store.set(Array.isArray(response.data) ? response.data : [response.data]); // Normaliza el formato
-  } catch (err) {
-    error.set(err.message || "Error desconocido");
-    if (modelConfig[type]) {
-      modelConfig[type].store.set([]); // Limpia el store en caso de error
-    }
-  } finally {
-    loading.set(false);
-  }
-}
-
-
-   -->

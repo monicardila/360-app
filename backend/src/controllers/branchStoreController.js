@@ -4,7 +4,7 @@ const queries = require("../utils/queries");
 const branchStoreControllers = {
   async getAll(req, res) {
     try {
-      const branchStore = await queries.findMany("branchStore");
+      const branchStore = await queries.findAll("branchStore");
       res.status(200).json(branchStore);
     } catch (error) {
       console.log(`Error finding branch Store: ${error.message}`);

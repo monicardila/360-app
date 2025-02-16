@@ -1,15 +1,23 @@
-# Dockerfile para el Backend
-FROM node:20-slim
+# Usa Node.js 20 como base
+FROM node:20
 
-# Establece el directorio de trabajo dentro del contenedor
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copia los archivos de configuración
+# Copia los archivos de dependencias
 COPY package.json package-lock.json ./
+
+# Instala las dependencias
 RUN npm install
 
-# Copia todo el contenido del backend al contenedor
+# Copia el resto del código del backend
 COPY . .
 
-# Comando para iniciar el servidor
-CMD ["node", "server.js"]
+# Genera las migraciones de Prisma y ejecuta la migración
+RUN npx prisma generate
+
+# Expone el puerto del backend
+EXPOSE 3000
+
+# Comando de inicio
+CMD ["npm", "start"]

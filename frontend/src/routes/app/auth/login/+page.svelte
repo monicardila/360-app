@@ -1,8 +1,18 @@
 <script>
-	import { setAuth } from "../../../../stores/authStores";
+	import { auth, setAuth } from "../../../../stores/authStores"; // Traemos el store y la función para actualizarlo
+	import { onDestroy } from "svelte";
 
 	let email = "";
 	let password = "";
+
+	// Suscripción al store 'auth' para obtener los valores de autenticación
+	const unsubscribe = auth.subscribe(($auth) => {
+		// Estos valores son reactivos, cambiarán automáticamente si el store cambia
+		console.log("Datos de autenticación:", $auth);
+	});
+
+	// Limpiar la suscripción al destruir el componente
+	onDestroy(() => unsubscribe());
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -18,24 +28,26 @@
 				},
 			);
 
+			const data = await response.json();
+			console.log("Respuesta del servidor:", data);
+
 			if (!response.ok) {
-				const errorData = await response.json();
-				throw new Error(errorData.error || "Invalid credentials");
+				throw new Error(data.error || "Credenciales incorrectas");
 			}
 
-			const data = await response.json();
-
-			if (response.ok) {
+			// Verifica si el token y el role existen antes de actualizar el store
+			if (data.token && data.role) {
 				setAuth(data.token, data.role);
-				alert("Login successful");
+				console.log("Autenticado con éxito:", data.token, data.role);
 
+				alert("Login exitoso");
 				window.location.href = "/app";
 			} else {
-				alert(data.error || "Invalid credentials  /login");
+				throw new Error("Respuesta del servidor incompleta");
 			}
 		} catch (error) {
-			console.log(error);
-			alert("Error connecting to server");
+			console.error("Error de autenticación:", error.message);
+			alert(error.message);
 		}
 	};
 </script>

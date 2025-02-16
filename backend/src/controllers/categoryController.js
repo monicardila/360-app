@@ -4,7 +4,7 @@ const queries = require("../utils/queries");
 const categoryControllers = {
   async getAll(req, res) {
     try {
-      const category = await queries.findMany("category");
+      const category = await queries.findAll("category");
       res.status(200).json(category);
     } catch (error) {
       console.log(`Error finding category: ${error.message}`);

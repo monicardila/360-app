@@ -5,7 +5,7 @@ const { count } = require("./employeesController");
 const supplierController = {
   async getAll(req, res) {
     try {
-      const supplier = await queries.findMany("supplier");
+      const supplier = await queries.findAll("supplier");
       res.status(200).json(supplier);
     } catch (error) {
       console.log(`Error finding supplier: ${error.message}`);

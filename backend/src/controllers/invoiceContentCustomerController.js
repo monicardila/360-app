@@ -3,7 +3,7 @@ const queries = require("../utils/queries");
 const invoiceContentCustomerController = {
   async getAll(req, res) {
     try {
-      const invoice_content_customer = await queries.findMany(
+      const invoice_content_customer = await queries.findAll(
         "invoice_content_customer"
       );
 

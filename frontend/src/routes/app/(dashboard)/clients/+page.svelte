@@ -1,58 +1,39 @@
 <script>
 	import { onMount } from "svelte";
-	import {
-		customer,
-		loadCustomers,
-		loading,
-		error,
-	} from "../../../../stores/models";
+	import { loadData } from "../../../../utils/models";
+	import { customer } from "../../../../stores/models";
+	import SearchBar from "../../../../components/SearchBar.svelte";
+	import Table from "../../../../components/Table.svelte";
 
-	onMount(() => {
-		console.log("Calling load customers...");
-		loadCustomers();
+	let filters = { id: null, status: null, all: true };
+
+	const handleSearch = async (event) => {
+		filters = event.detail.filters;
+
+		if (filters.id) {
+			await loadData("customer", "byId", filters);
+		} else if (filters.status !== null && filters.status !== undefined) {
+			await loadData("customer", "byStatus", filters);
+		} else if (filters.name) {
+			await loadData("customer", "byName", filters);
+		} else {
+			await loadData("customer", "all", filters);
+		}
+	};
+
+	// Cargar productos al montar la vista
+	onMount(async () => {
+		await loadData("customer", "all", filters);
 	});
+
+	// Definir columnas específicas para productos
+	const columns = ["id", "identification_card", "customer_invoice"];
 </script>
 
-<!-- th: columns, tr:cells -->
-{#if $loading}
-	<p>Loading data...</p>
-{:else if $customer && $customer.length > 0}
-	<section>
-		<h2>CUSTOMERS</h2>
-		<table
-			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
-		>
-			<thead>
-				<tr class="bg-gray-100">
-					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2"
-						>Identification card</th
-					>
-					<th class="border border-gray-300 px-4 pt-2"
-						>Customer invoice</th
-					>
-				</tr>
-			</thead>
-			<tbody>
-				{#each $customer as customer}
-					<tr class="hover:bg-gray-50">
-						<td class="border border-gray-300 px-4 py-2"
-							>{customer.id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{customer.identification_card}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{customer.customer_invoice}</td
-						>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-		<ul></ul>
-	</section>
-{:else if $error}
-	<p class="text-red-400">{$error}</p>
-{:else}
-	<p>No customers found.</p>
-{/if}
+<h5 class="right-20 absolute mt-16 font-medium">Customer</h5>
+
+<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+<SearchBar bind:filters on:search={handleSearch} searchFields={["id"]} />
+
+<!-- Usar el componente Table con columnas y datos -->
+<Table {columns} data={$customer} />

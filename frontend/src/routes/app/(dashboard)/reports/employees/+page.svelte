@@ -1,4 +1,4 @@
-<script>
+<!--<script>
 	import { onMount } from "svelte";
 	import {
 		employees,
@@ -12,9 +12,10 @@
 		loadEmployees();
 	});
 </script>
+-->
 
 <!-- th: columns, tr:cells -->
-{#if $loading}
+<!--{#if $loading}
 	<p>Loading data...</p>
 {:else if $employees && $employees.length > 0}
 	<section>
@@ -80,3 +81,62 @@
 {:else}
 	<p>No employees found.</p>
 {/if}
+
+
+
+-->
+
+<script>
+	import { onMount } from "svelte";
+	import { loadData } from "../../../../../utils/models";
+	import { employees } from "../../../../../stores/models";
+	import SearchBar from "../../../../../components/SearchBar.svelte";
+	import Table from "../../../../../components/Table.svelte";
+
+	let filters = { id: null, status: null, all: true };
+
+	const handleSearch = async (event) => {
+		filters = event.detail.filters;
+
+		if (filters.id) {
+			await loadData("employees", "byId", filters);
+		} else if (filters.status !== null && filters.status !== undefined) {
+			await loadData("employees", "byStatus", filters);
+		} else if (filters.name) {
+			await loadData("employees", "byName", filters);
+		} else {
+			await loadData("employees", "all", filters);
+		}
+	};
+
+	// Cargar productos al montar la vista
+	onMount(async () => {
+		await loadData("employees", "all", filters);
+	});
+
+	// Definir columnas específicas para productos
+	const columns = [
+		"id",
+		"identification_card",
+		"rol",
+		"name",
+		"phone",
+		"email",
+		"salary",
+		"bank_account_number",
+		"status",
+		"branch_store_id",
+	];
+</script>
+
+<h5 class="right-20 absolute mt-16 font-medium">Employees</h5>
+
+<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+<SearchBar
+	bind:filters
+	on:search={handleSearch}
+	searchFields={["id", "status"]}
+/>
+
+<!-- Usar el componente Table con columnas y datos -->
+<Table {columns} data={$employees} />
