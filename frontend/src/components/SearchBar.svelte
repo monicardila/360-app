@@ -63,8 +63,9 @@
 	console.log("Filtros visibles:", searchFields);
 </script>
 
-<div
-	class="mt-24 m-auto flex items-center justify-center space-x-4 max-w-[1500px] py-4 pb-8 bg-white shadow-md rounded-t-lg"
+<form
+	on:submit|preventDefault={handleSearch}
+	class="mt-2 m-auto flex items-center justify-center space-x-4 min-w-[100px]: max-w-[1500px] py-4 pb-8 bg-white shadow-md rounded-t-lg"
 >
 	{#if searchFields.includes("id")}
 		<div class="flex flex-col space-y-2 min-w-[15%]">
@@ -157,9 +158,9 @@
 		on:click={handleClear}
 		class="border-2 font-semibold border-slate-300 bg-red-300 text-white rounded-xl p-3 px-6 mt-8"
 	>
-		Clean
+		All
 	</button>
-</div>
+</form>
 
 <!--
 - Cuando el usuario escribe en el input o limpia los filtros en SearchBar.svelte, se ejecuta dispatch("search", { filters }).

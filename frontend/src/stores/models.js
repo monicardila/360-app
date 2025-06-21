@@ -12,6 +12,8 @@ export const invoice_content_supplier = writable([]);
 export const customer = writable([]);
 export const customer_invoice = writable([]);
 export const invoice_content_customer = writable([]);
+export const cart = writable([]);
+export const cartItem = writable([]);
 
 // branch_store *
 // employees *
@@ -24,3 +26,5 @@ export const invoice_content_customer = writable([]);
 // customer *
 // customer_invoice
 // invoice_content_customer
+// cart
+// cartItem

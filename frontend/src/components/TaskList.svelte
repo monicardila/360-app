@@ -1,6 +1,6 @@
 <script>
 	import { task } from "../stores/taskCalendar";
-	import Calendar from "../components/calendar.svelte";
+	//import Calendar from "./Calendar.svelte";
 	let newTask = "";
 	let selectedDate = "";
 

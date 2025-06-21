@@ -153,13 +153,13 @@
 	<div class="m-0 flex-1 w-full overflow-auto">
 		<!-- nav_bar -->
 		<div
-			class="fixed w-full top-0 right-0 left-0 h-[90px] shadow-md z-20 bg-white inline-flex"
+			class="fixed w-full top-0 right-0 left-0 h-[60px] shadow-md z-20 bg-white inline-flex"
 		>
 			<div
 				class=" absolute top-1/2 transform -translate-y-1/2 flex items-center right-10 space-x-20"
 			>
 				<!-- search general -->
-				<div class="relative w-80 h-10 mx-auto mt-8 mb-10 flex">
+				<div class="relative w-80 h-10 mx-auto mt-10 mb-10 flex">
 					<i
 						class="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-sky-600"
 					></i>
@@ -178,7 +178,7 @@
 		</div>
 
 		<!-- content -->
-		<main class=" p-10 h-screen bg-slate-100">
+		<main class=" h-screen bg-slate-100">
 			<slot />
 		</main>
 	</div>

@@ -10,7 +10,15 @@
 	const handleSearch = async (event) => {
 		filters = event.detail.filters;
 
-		if (filters.id) {
+		// Object.values(filters) = devuelve unicamente los valores de ese objeto ejemplo : [null, "", ""]
+		// .every() = revisa si todos los elementos del arreglo cumplen con la condicion
+		const isEmpty = Object.values(filters).every(
+			(value) => value === null || value === "",
+		);
+
+		if (isEmpty) {
+			await loadData("branch_store", "all", filters);
+		} else if (filters.id) {
 			await loadData("branch_store", "byId", filters);
 		} else if (filters.status !== null && filters.status !== undefined) {
 			await loadData("branch_store", "byStatus", filters);
@@ -40,12 +48,14 @@
 
 <h5 class="right-20 absolute mt-16 font-medium">Branch store</h5>
 
-<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
-<SearchBar
-	bind:filters
-	on:search={handleSearch}
-	searchFields={["id", "status"]}
-/>
+<div class="mt-24">
+	<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+	<SearchBar
+		bind:filters
+		on:search={handleSearch}
+		searchFields={["id", "status"]}
+	/>
 
-<!-- Usar el componente Table con columnas y datos -->
-<Table {columns} data={$branch_store} />
+	<!-- Usar el componente Table con columnas y datos -->
+	<Table {columns} data={$branch_store} />
+</div>

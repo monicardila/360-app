@@ -19,6 +19,8 @@ const customerInvoiceRoutes = require("./src/routes/customerInvoiceRoutes");
 const supplierInvoiceRoutes = require("./src/routes/supplierInvoicesRoutes");
 const invoiceContentSupplierRoutes = require("./src/routes/invoiceContentSupplierRoutes");
 const invoiceContentCustomerRoutes = require("./src/routes/invoiceContentCustomerRoutes");
+const cartRoutes = require("./src/routes/cartRoutes");
+const cartItemRoutes = require("./src/routes/cartItemRoutes");
 
 // specific configuration CORS
 const corsOptions = {
@@ -50,6 +52,8 @@ app.use("/api/v1/products", productsRoutes); //ok
 app.use("/api/v1/customers", customersRoutes); //ok
 app.use("/api/v1/employees", employeesRoutes); //ok
 app.use("/api/v1/suppliers", supplierRoutes); //ok
+app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/cartItem", cartItemRoutes);
 
 // Routes authentication
 app.use("/api/v1/auth", routerAuth);

@@ -95,8 +95,8 @@ const productsController = {
   },
   async count(req, res) {
     try {
-      const count = await queries.count("products");
-      res.status(200).json({ total: count });
+      const products = await queries.count("products");
+      res.status(200).json({ total: products });
     } catch (error) {
       console.log("Error in counting products: ", error);
       res

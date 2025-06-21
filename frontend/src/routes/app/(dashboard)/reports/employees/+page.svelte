@@ -1,91 +1,3 @@
-<!--<script>
-	import { onMount } from "svelte";
-	import {
-		employees,
-		loadEmployees,
-		loading,
-		error,
-	} from "../../../../../stores/models";
-
-	onMount(() => {
-		console.log("Calling loadEmployees...");
-		loadEmployees();
-	});
-</script>
--->
-
-<!-- th: columns, tr:cells -->
-<!--{#if $loading}
-	<p>Loading data...</p>
-{:else if $employees && $employees.length > 0}
-	<section>
-		<h2>EMPLOYEES</h2>
-		<table
-			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
-		>
-			<thead>
-				<tr class="bg-gray-100">
-					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2">Rol</th>
-					<th class="border border-gray-300 px-4 pt-2">Name</th>
-					<th class="border border-gray-300 px-4 py-2">Phone</th>
-					<th class="border border-gray-300 px-4 py-2">Email</th>
-					<th class="border border-gray-300 px-4 py-2">Salary</th>
-					<th class="border border-gray-300 px-4 py-2"
-						>Bank_account</th
-					>
-					<th class="border border-gray-300 px-4 py-2"
-						>Branch_store</th
-					>
-					<th class="border border-gray-300 px-4 py-2">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each $employees as employee}
-					<tr class="hover:bg-gray-50">
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.rol}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.name}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.phone}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.email}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.salary}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.bank_account_number}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.branch_store_id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.status}</td
-						>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-		<ul></ul>
-	</section>
-{:else if $error}
-	<p class="text-red-400">{$error}</p>
-{:else}
-	<p>No employees found.</p>
-{/if}
-
-
-
--->
-
 <script>
 	import { onMount } from "svelte";
 	import { loadData } from "../../../../../utils/models";
@@ -98,7 +10,15 @@
 	const handleSearch = async (event) => {
 		filters = event.detail.filters;
 
-		if (filters.id) {
+		// Object.values(filters) = devuelve unicamente los valores de ese objeto ejemplo : [null, "", ""]
+		// .every() = revisa si todos los elementos del arreglo cumplen con la condicion
+		const isEmpty = Object.values(filters).every(
+			(value) => value === null || value === "",
+		);
+
+		if (isEmpty) {
+			await loadData("employees", "all", filters);
+		} else if (filters.id) {
 			await loadData("employees", "byId", filters);
 		} else if (filters.status !== null && filters.status !== undefined) {
 			await loadData("employees", "byStatus", filters);
@@ -129,14 +49,26 @@
 	];
 </script>
 
-<h5 class="right-20 absolute mt-16 font-medium">Employees</h5>
+<h5 class="right-20 absolute font-medium">Employees info</h5>
+
+<button
+	on:click={() => {
+		window.alert(
+			"SE ABRE MODAL PARA LA CREACION DE PRODUCTOS - CADA PRODUCTO DEBE TENER EL BOTON DE EDITAR",
+		);
+	}}
+	class="right-20 absolute mt-14 font-medium bg-green-600 text-white py-2 px-4 rounded-md"
+	>Crear</button
+>
 
 <!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
-<SearchBar
-	bind:filters
-	on:search={handleSearch}
-	searchFields={["id", "status"]}
-/>
+<div class="mt-24">
+	<SearchBar
+		bind:filters
+		on:search={handleSearch}
+		searchFields={["id", "status"]}
+	/>
 
-<!-- Usar el componente Table con columnas y datos -->
-<Table {columns} data={$employees} />
+	<!-- Usar el componente Table con columnas y datos -->
+	<Table {columns} data={$employees} />
+</div>

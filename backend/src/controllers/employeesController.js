@@ -44,6 +44,7 @@ const employeesController = {
       res.status(500).json({ error: "Error creating employees" });
     }
   },
+
   async update(req, res) {
     try {
       const { id } = req.params;

@@ -23,8 +23,6 @@ const customersController = {
         includeInvoices === "true"
           ? {
               customer_invoice: true,
-              invoice_content_customer: true,
-              products: true,
             }
           : {};
 
