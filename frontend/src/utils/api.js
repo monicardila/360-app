@@ -417,4 +417,9 @@ export default {
 	deleteCartItem: (id, data) => {
 		return apiClient.delete(`/cartItem/${id}`, data);
 	},
+
+	// venta
+	createSale: (data) => {
+		return apiClient.post(`/sales`, data);
+	},
 };

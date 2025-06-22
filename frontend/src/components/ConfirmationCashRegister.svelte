@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from "svelte";
 	import { jsPDF } from "jspdf";
 	import { employees } from "../stores/models";
+	import { createSale } from "../utils/apiSales";
 
 	const dispatch = createEventDispatcher();
 	// se dispara el evento "close" que se llama en cashier
@@ -73,6 +74,31 @@
 		// Genera y descarga el archivo
 		doc.save(`factura_${Date.now()}.pdf`);
 	}
+
+	async function handleConfirm() {
+		try {
+			await createSale({
+				customerId: idNumber,
+				typeDocument,
+				phone: "N/A",
+				employeeName,
+				total,
+				cashClient,
+				branch_store_id: 1,
+				products: selectedProducts.map((p) => ({
+					name: p.name,
+					price: p.price,
+					quantity: p.quantity,
+				})),
+			});
+
+			generarPDF();
+			closeModal();
+		} catch (error) {
+			console.error("Error al crear la venta:", error);
+			alert("Ocurrió un error al procesar la venta.");
+		}
+	}
 </script>
 
 <div
@@ -115,10 +141,7 @@
 			</button>
 			<button
 				class=" bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
-				on:click={() => {
-					generarPDF();
-					closeModal();
-				}}
+				on:click={handleConfirm}
 				disabled={!canConfirm}
 			>
 				Confirmar

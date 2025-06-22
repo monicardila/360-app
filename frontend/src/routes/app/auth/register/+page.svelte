@@ -10,8 +10,6 @@
 	let brand = "";
 	let error = null;
 
-	// ERROR EN ESTE ARCHIVO
-
 	async function register() {
 		if (password !== confirmPassword) {
 			error = "Password do not match";
