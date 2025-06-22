@@ -23,6 +23,7 @@
 		"@fullcalendar/daygrid": "^6.1.17",
 		"@fullcalendar/interaction": "^6.1.15",
 		"axios": "^1.7.9",
+		"jspdf": "^3.0.1",
 		"swiper": "^11.1.15"
 	}
 }

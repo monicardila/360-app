@@ -8,6 +8,7 @@
 	import { loadData } from "../../../../utils/models";
 	import SearchBar from "../../../../components/SearchBar.svelte";
 	import ProductTableCash from "../../../../components/ProductTableCash.svelte";
+	import ConfirmationCashRegister from "../../../../components/ConfirmationCashRegister.svelte";
 
 	let filters = { id: null, status: null, all: true }; // filtros tabla productos
 	let isAuthenticated;
@@ -15,9 +16,12 @@
 	let selectedProducts = []; // canasta de productos
 	// campos factura
 	let employee = "";
-	let date = "";
 	let typeDocument = "";
 	let idNumber = "";
+	let total = 0;
+	let date = new Date().toISOString().split("T")[0];
+	// estado componente de pago
+	let showConfirmation = false;
 
 	const handleSearch = async (event) => {
 		filters = event.detail.filters;
@@ -61,23 +65,6 @@
 		updateAuthFromCookie(); // Fuerza la actualización del store al cargar la vista
 	});
 
-	// ___ Carrito de compras ___
-	//function addProduct(product) {
-	//	console.log("PRODUCTO AGREGADO: ", product);
-	//	//alert(`Producto recibido: ${product.name} (ID: ${product.id})`);
-	//	const index = selectedProducts.findIndex((p) => p.id === product.id);
-	//	if (index !== -1) {
-	//		selectedProducts[index].quantity += 1;
-	//		// reactiva el renderizado
-	//		selectedProducts = [...selectedProducts];
-	//	} else {
-	//		selectedProducts = [
-	//			...selectedProducts,
-	//			{ ...product, quantity: 1 },
-	//		];
-	//	}
-	//}
-
 	function addProduct(product) {
 		const cleanPrice = Number(product.price ?? 0);
 
@@ -103,9 +90,13 @@
 
 	function decrementQuantity(id) {
 		const index = selectedProducts.findIndex((p) => p.id === id);
-		if (index !== -1) {
+		if (index !== -1 && selectedProducts[index].quantity > 1) {
+			// sí existe ese producto, podemos modificarlo
 			selectedProducts[index].quantity -= 1;
 			selectedProducts = [...selectedProducts];
+		}
+		if (quantity <= 0) {
+			quantity = 0;
 		}
 	}
 
@@ -129,7 +120,6 @@
 		}, 0);
 	}
 
-	let total = 0;
 	$: if (selectedProducts) {
 		total = calculateTotal();
 	}
@@ -138,6 +128,11 @@
 	console.log("Total con la funcion: ", calculateTotal());
 
 	$: console.log("canasta: ", selectedProducts);
+
+	// Estado componente de registro de pago
+	function openConfirmation() {
+		showConfirmation = true;
+	}
 </script>
 
 {#if role === "admin"}
@@ -328,10 +323,25 @@
 					</h3>
 					<button
 						class=" bg-green-800 font-bold text-xl text-white py-2 px-4 rounded-2xl absolute right-0 bottom-1 mx-1"
-						>Pagar</button
+						on:click={openConfirmation}>Pagar</button
 					>
 				</div>
 			</div>
+
+			<!-- modal registro de pago -->
+
+			{#if showConfirmation}
+				<ConfirmationCashRegister
+					{employee}
+					{typeDocument}
+					{idNumber}
+					{date}
+					{total}
+					{selectedProducts}
+					on:close={() => (showConfirmation = false)}
+				/>
+			{/if}
+
 			<!-- view mobiles -->
 			<div class="w-full container md:hidden">
 				<h3
