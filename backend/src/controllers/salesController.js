@@ -28,7 +28,7 @@ const salesController = {
       const invoice = await prisma.customer_invoice.create({
         data: {
           branch_store_id,
-          phone,
+          phone: String(phone),
           employee_name: employeeName,
           customer_identification_card: String(customerId),
           total_price: total,

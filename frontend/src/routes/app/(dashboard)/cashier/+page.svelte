@@ -5,6 +5,7 @@
 	import { onMount } from "svelte";
 	import { products } from "../../../../stores/models";
 	import { employees } from "../../../../stores/models";
+	import { branch_store } from "../../../../stores/models";
 	import { loadData } from "../../../../utils/models";
 	import SearchBar from "../../../../components/SearchBar.svelte";
 	import ProductTableCash from "../../../../components/ProductTableCash.svelte";
@@ -20,6 +21,8 @@
 	let idNumber = "";
 	let total = 0;
 	let date = new Date().toISOString().split("T")[0];
+	let branchStore = "";
+	let phone = "";
 	// estado componente de pago
 	let showConfirmation = false;
 
@@ -49,6 +52,7 @@
 	onMount(async () => {
 		await loadData("products", "all", filters);
 		await loadData("employees", "all", {});
+		await loadData("branch_store", "all", {});
 	});
 
 	// Definir columnas específicas para productos
@@ -133,6 +137,15 @@
 	function openConfirmation() {
 		showConfirmation = true;
 	}
+
+	// confirmaciòn campos factura
+	$: isFormValid =
+		!!employee &&
+		!!branchStore &&
+		!!typeDocument &&
+		!!idNumber &&
+		!!date &&
+		selectedProducts.length > 0;
 </script>
 
 {#if role === "admin"}
@@ -164,7 +177,7 @@
 			<div
 				class="hidden md:block mx-auto xl:mx-2 min-w-[150px] max-w-2xl bg-white p-8 shadow-md flex-grow mt-0 drop-shadow-lg border border-gray-200 max-h-[578px]"
 			>
-				<h1 class="text-3xl font-bold pb-9">Orden de venta</h1>
+				<h1 class="text-3xl font-bold pb-3">Orden de venta</h1>
 				<div class="relative">
 					<fieldset>
 						<legend class="text-gray-400 text-xs"
@@ -180,7 +193,7 @@
 									aria-label="Empleado"
 									class=" rounded-xl border-gray-400 border p-1 absolute w-48 pl-2 ml-4"
 								>
-									<option value="" disabled selected
+									<option value="" disabled
 										>Selecciona un empleado</option
 									>
 									{#each $employees as emp}
@@ -202,6 +215,40 @@
 								/>
 							</label>
 						</div>
+						<div class="pl-5 pb-3">
+							<label>
+								<span class="font-medium">Sucursales</span>
+								<select
+									bind:value={branchStore}
+									required
+									name="type-empleado"
+									aria-label="Empleado"
+									class=" rounded-xl border-gray-400 border p-1 absolute w-48 pl-2 ml-4"
+								>
+									<option value="" disabled selected
+										>Selecciona una sucursal</option
+									>
+									{#each $branch_store as bs}
+										<option value={bs.id}
+											>{bs.name} - {bs.address}</option
+										>
+									{/each}
+								</select>
+							</label>
+						</div>
+						<div class="right-3 absolute">
+							<label
+								><span class=" font-medium">Numero</span>
+								<input
+									type="number"
+									placeholder="3195254.."
+									required
+									bind:value={idNumber}
+									class="rounded-xl border-gray-400 border p-1 w-48 pl-2 ml-6"
+								/>
+							</label>
+						</div>
+
 						<div class="pl-5">
 							<label
 								><span class=" font-medium">Tipo</span>
@@ -230,12 +277,12 @@
 						</div>
 						<div class="right-3 top-[68px] absolute">
 							<label
-								><span class=" font-medium">Numero</span>
+								><span class=" font-medium">Telefono</span>
 								<input
 									type="number"
 									placeholder="123456"
 									required
-									bind:value={idNumber}
+									bind:value={phone}
 									class="rounded-xl border-gray-400 border p-1 w-48 pl-2 ml-6"
 								/>
 							</label>
@@ -322,8 +369,9 @@
 						Total: ${total.toFixed(2) ?? "null"}
 					</h3>
 					<button
-						class=" bg-green-800 font-bold text-xl text-white py-2 px-4 rounded-2xl absolute right-0 bottom-1 mx-1"
-						on:click={openConfirmation}>Pagar</button
+						class=" bg-green-800 font-bold text-xl text-white py-2 px-4 rounded-2xl absolute right-0 bottom-1 mx-1 disabled:bg-gray-400"
+						on:click={openConfirmation}
+						disabled={!isFormValid}>Pagar</button
 					>
 				</div>
 			</div>
@@ -338,6 +386,8 @@
 					{date}
 					{total}
 					{selectedProducts}
+					{branchStore}
+					{phone}
 					on:close={() => (showConfirmation = false)}
 				/>
 			{/if}

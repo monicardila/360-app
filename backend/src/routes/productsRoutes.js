@@ -8,7 +8,7 @@ productsRoutes.get("/", productsController.getAll); // ok
 productsRoutes.get("/:id", productsController.getById); // ok
 productsRoutes.get("/name/:name", productsController.getByName); // ok
 productsRoutes.post("/", productsController.create); // ok
-productsRoutes.put("/update:id", productsController.update); // ok
+productsRoutes.put("/:id", productsController.update); // ok
 productsRoutes.put("/deactivate/:id", productsController.deactivate); // ok
 productsRoutes.put("/activate/:id", productsController.activate); // ok
 

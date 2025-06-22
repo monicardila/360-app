@@ -23,6 +23,9 @@ const modelConfig = {
 			byStatus: api.statusProducts,
 			byName: api.getByNameProducts,
 		},
+		actions: {
+			update: api.updateProducts, // <-- aquí agregas esto
+		},
 	},
 	employees: {
 		store: employees,
@@ -132,5 +135,20 @@ export async function loadData(type, operation, filters = {}) {
 		}
 	} finally {
 		loading.set(false);
+	}
+}
+
+export async function updateModel(type, id, data) {
+	try {
+		const config = modelConfig[type];
+		if (!config || !config.actions || !config.actions.update) {
+			throw new Error(`Update not supported for model: ${type}`);
+		}
+
+		const response = await config.actions.update(id, data);
+		return response;
+	} catch (err) {
+		console.error(`Error updating ${type}:`, err);
+		throw err;
 	}
 }
