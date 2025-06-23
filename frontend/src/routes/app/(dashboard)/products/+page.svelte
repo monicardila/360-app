@@ -1,17 +1,50 @@
 <script>
 	import { onMount } from "svelte";
-	import { loadData } from "../../../../utils/models";
-	import { products } from "../../../../stores/models";
+	import { products, supplier, categories } from "../../../../stores/models";
 	import SearchBar from "../../../../components/SearchBar.svelte";
 	import Table from "../../../../components/Table.svelte";
+	import FormCreateUpdate from "../../../../components/FormCreateUpdate.svelte";
+	import { fieldSchemas } from "../../../../utils/fieldsSchema";
+	import { createModel, loadData } from "../../../../utils/models";
 
 	let filters = { id: null, status: null, all: true };
+	let showForm = false;
 
+	let productFields = [];
+
+	// Al montar, carga productos, proveedores y categorías
+	onMount(async () => {
+		await Promise.all([
+			loadData("products", "all", filters),
+			loadData("supplier", "all"),
+			loadData("categories", "all"),
+		]);
+
+		// Mapear los campos y llenar dinámicamente los selects
+		productFields = fieldSchemas.products.map((field) => {
+			if (field.name === "supplier_id") {
+				return {
+					...field,
+					options: $supplier.map((s) => ({ id: s.id, name: s.name })),
+				};
+			}
+			if (field.name === "categoryId") {
+				return {
+					...field,
+					options: $categories.map((c) => ({
+						id: c.id,
+						name: c.name,
+					})),
+				};
+			}
+			return field;
+		});
+	});
+
+	// Función para buscar productos según filtros
 	const handleSearch = async (event) => {
 		filters = event.detail.filters;
 
-		// Object.values(filters) = devuelve unicamente los valores de ese objeto ejemplo : [null, "", ""]
-		// .every() = revisa si todos los elementos del arreglo cumplen con la condicion
 		const isEmpty = Object.values(filters).every(
 			(value) => value === null || value === "",
 		);
@@ -29,44 +62,78 @@
 		}
 	};
 
-	// Cargar productos al montar la vista
-	onMount(async () => {
-		await loadData("products", "all", filters);
-	});
+	// Función para crear un producto
+	async function handleCreate(event) {
+		console.log("Datos enviados:", event);
+		const data = event.detail;
+		if (
+			!data.name ||
+			!data.price ||
+			!data.stock ||
+			!data.categoryId ||
+			!data.supplier_id
+		) {
+			alert("Por favor completa todos los campos obligatorios.");
+			return;
+		}
 
-	// Definir columnas específicas para productos
-	const columns = [
-		"id",
-		"supplier_id",
-		"categoryId",
-		"name",
-		"description",
-		"price",
-		"stock",
-		"orders",
-	];
+		try {
+			await createModel("products", data);
+			await loadData("products", "all", filters);
+			showForm = false;
+		} catch (error) {
+			console.error("Error al crear producto:", error);
+			alert("Error al crear producto");
+		}
+	}
+
+	// Mostrar el formulario
+	function openForm() {
+		showForm = true;
+	}
 </script>
 
-<h5 class="right-20 absolute font-medium">Products</h5>
+<!-- Vista -->
+<div class="relative w-auto">
+	<!-- <h5 class="right-20 absolute font-medium">Products</h5> -->
 
-<button
-	on:click={() => {
-		window.alert(
-			"SE ABRE MODAL PARA LA CREACION DE PRODUCTOS - CADA PRODUCTO DEBE TENER EL BOTON DE EDITAR",
-		);
-	}}
-	class="right-20 absolute mt-14 font-medium bg-green-600 text-white py-2 px-4 rounded-md"
-	>Crear</button
->
+	{#if showForm}
+		<FormCreateUpdate
+			fields={productFields}
+			on:submit={handleCreate}
+			submitLabel="Crear producto"
+			on:close={() => (showForm = false)}
+		/>
+	{/if}
 
-<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
-<div class="mt-24">
-	<SearchBar
-		bind:filters
-		on:search={handleSearch}
-		searchFields={["id", "status", "name"]}
-	/>
+	<div class="mt-24 w-auto border">
+		<SearchBar
+			bind:filters
+			on:search={handleSearch}
+			searchFields={["id", "status", "name"]}
+		/>
+		<button
+			on:click={openForm}
+			class="fixed bottom-6 right-6 z-50 bg-green-600 text-white text-3xl w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-green-700 transition"
+			aria-label="Crear nuevo"
+		>
+			+
+		</button>
 
-	<!-- Usar el componente Table con columnas y datos -->
-	<Table {columns} data={$products} />
+		<Table
+			columns={[
+				"id",
+				"supplier_id",
+				"categoryId",
+				"name",
+				"description",
+				"price",
+				"stock",
+				"status",
+			]}
+			data={$products}
+			resourceName="products"
+			fieldSchema={productFields}
+		/>
+	</div>
 </div>

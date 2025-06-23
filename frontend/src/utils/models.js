@@ -24,7 +24,8 @@ const modelConfig = {
 			byName: api.getByNameProducts,
 		},
 		actions: {
-			update: api.updateProducts, // <-- aquí agregas esto
+			update: api.updateProducts,
+			create: api.createProducts,
 		},
 	},
 	employees: {
@@ -33,6 +34,10 @@ const modelConfig = {
 			all: api.getAllEmployees,
 			byId: api.getByIdEmployees,
 			byStatus: api.statusEmployees,
+		},
+		actions: {
+			update: api.updateEmployees,
+			create: api.createEmployees,
 		},
 	},
 	supplier: {
@@ -43,6 +48,10 @@ const modelConfig = {
 			byStatus: api.statusSupplier,
 			// filter by nit
 		},
+		actions: {
+			update: api.updateSupplier,
+			create: api.createSupplier,
+		},
 	},
 	orders: {
 		store: orders,
@@ -50,6 +59,10 @@ const modelConfig = {
 			all: api.getAllOrders,
 			byId: api.getByIdOrders,
 			// filter by status
+		},
+		actions: {
+			update: api.updateOrders,
+			create: api.createOrders,
 		},
 	},
 	customer: {
@@ -66,6 +79,10 @@ const modelConfig = {
 			byId: api.getByIdBranchStore,
 			byStatus: api.statusBranchStore,
 		},
+		actions: {
+			update: api.updateBranchStore,
+			create: api.createBranchStore,
+		},
 	},
 	categories: {
 		store: categories,
@@ -73,6 +90,10 @@ const modelConfig = {
 			all: api.getAllCategory,
 			byId: api.getByIdCategory,
 			byStatus: api.statusCategory,
+		},
+		actions: {
+			update: api.updateCategory,
+			create: api.createCategory,
 		},
 	},
 	cart: {
@@ -149,6 +170,21 @@ export async function updateModel(type, id, data) {
 		return response;
 	} catch (err) {
 		console.error(`Error updating ${type}:`, err);
+		throw err;
+	}
+}
+
+export async function createModel(type, data) {
+	try {
+		const config = modelConfig[type];
+		if (!config || !config.actions || !config.actions.create) {
+			throw new Error(`Create not supported for model: ${type}`);
+		}
+
+		const response = await config.actions.create(data);
+		return response;
+	} catch (err) {
+		console.error(`Error creating ${type}:`, err);
 		throw err;
 	}
 }

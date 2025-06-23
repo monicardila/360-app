@@ -2,7 +2,6 @@
 	import { createEventDispatcher } from "svelte";
 	import { jsPDF } from "jspdf";
 	import { employees } from "../stores/models";
-	import { products } from "../stores/models";
 	import { branch_store } from "../stores/models";
 	import { createSale } from "../utils/apiSales";
 	import { updateModel } from "../utils/models";
@@ -177,6 +176,12 @@
 		dispatch("close");
 		loadData("products", "all");
 	}
+
+	// confirmar y guardar
+	async function confirmAndSave() {
+		await handleConfirm();
+		await confirmPurchase();
+	}
 </script>
 
 <div
@@ -219,7 +224,7 @@
 			</button>
 			<button
 				class=" bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
-				on:click={(handleConfirm, confirmPurchase)}
+				on:click={confirmAndSave}
 				disabled={!canConfirm}
 			>
 				Confirmar

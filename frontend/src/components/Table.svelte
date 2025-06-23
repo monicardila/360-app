@@ -1,11 +1,40 @@
-<!-- Componente general de la tabla en las vistas -->
 <script>
-	// Se declaran los props que el componente va a recibir desde afuera
-	export let columns = []; // Array de nombres de columnas
-	export let data = []; // Array de objetos con los datos
+	import FormCreateUpdate from "./FormCreateUpdate.svelte";
+	import { loadData, updateModel } from "../utils/models";
+
+	export let columns = [];
+	export let data = [];
+	export let resourceName = ""; // <-- Ej: "products"
+	export let fieldSchema = []; // <-- campos como los de fieldSchemas.products
+
+	let showEditForm = false;
+	let selectedModel = {};
+
+	async function handleEdit(id) {
+		await loadData(resourceName, "byId", { id });
+		const selected = data.find((item) => item.id === id);
+		selectedModel = selected;
+		showEditForm = true;
+	}
+
+	async function handleUpdate(updatedData) {
+		await updateModel(resourceName, updatedData.id, updatedData);
+		await loadData(resourceName, "all");
+		showEditForm = false;
+	}
 </script>
 
 <div class="overflow-x-auto max-w-[1500px] m-auto bg-white">
+	{#if showEditForm}
+		<FormCreateUpdate
+			fields={fieldSchema}
+			model={selectedModel}
+			submitLabel="Actualizar"
+			on:submit={(e) => handleUpdate(e.detail)}
+			on:close={() => (showEditForm = false)}
+		/>
+	{/if}
+
 	{#if data.length > 0}
 		<div class="overflow-y-auto max-h-[500px]">
 			<table
@@ -18,6 +47,9 @@
 								>{col}</th
 							>
 						{/each}
+						<th class="border border-gray-300 px-4 py-2 text-center"
+							>Acciones</th
+						>
 					</tr>
 				</thead>
 				<tbody>
@@ -28,12 +60,28 @@
 									>{row[col]}</td
 								>
 							{/each}
+							<td
+								class="border border-gray-300 px-4 py-2 text-center"
+							>
+								<button
+									class="text-blue-600 hover:text-blue-800 mr-2"
+									on:click={() => handleEdit(row.id)}
+									title="Editar">✏️</button
+								>
+								<!-- <button
+									class="text-red-600 hover:text-red-800"
+									title="Eliminar"
+									on:click={() =>
+										console.log("Eliminar", row.id)}
+									>🗑️</button
+								> -->
+							</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
 		</div>
 	{:else}
-		<p class="text-center p-4">No data available.</p>
+		<p class="text-center p-4">No hay datos disponibles.</p>
 	{/if}
 </div>
