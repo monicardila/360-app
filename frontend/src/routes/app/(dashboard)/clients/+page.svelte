@@ -17,15 +17,24 @@
 		);
 
 		if (isEmpty) {
-			await loadData("customer", "all", filters);
+			await loadData("customer", "all", { includeInvoices: true });
 		} else if (filters.id) {
-			await loadData("customer", "byId", filters);
+			await loadData("customer", "byId", {
+				...filters,
+				includeInvoices: true,
+			});
 		} else if (filters.status !== null && filters.status !== undefined) {
-			await loadData("customer", "byStatus", filters);
+			await loadData("customer", "byStatus", {
+				...filters,
+				includeInvoices: true,
+			});
 		} else if (filters.name) {
-			await loadData("customer", "byName", filters);
+			await loadData("customer", "byName", {
+				...filters,
+				includeInvoices: true,
+			});
 		} else {
-			await loadData("customer", "all", filters);
+			await loadData("customer", "all", { includeInvoices: true });
 		}
 	};
 
@@ -45,5 +54,5 @@
 	<SearchBar bind:filters on:search={handleSearch} searchFields={["id"]} />
 
 	<!-- Usar el componente Table con columnas y datos -->
-	<Table {columns} data={$customer} />
+	<Table {columns} data={$customer} hideActions={true} />
 </div>

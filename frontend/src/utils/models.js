@@ -88,7 +88,7 @@ const modelConfig = {
 	categories: {
 		store: categories,
 		fetchers: {
-			all: api.getAllCategory,
+			all: (filters) => api.getAllCategory(filters.includeProducts),
 			byId: api.getByIdCategory,
 			byStatus: api.statusCategory,
 		},
@@ -144,7 +144,6 @@ export async function loadData(type, operation, filters = {}) {
 			if (filters.includeProducts) extraParams.includeProducts = true;
 			response = await fetcher(filters.id, extraParams);
 		} else if (operation === "byStatus" && filters.delivery_status) {
-			// 🔥 ESTA ES LA LÍNEA CLAVE QUE TE FALTABA
 			response = await fetcher(filters);
 		} else {
 			throw new Error(

@@ -131,7 +131,7 @@ export const fieldSchemas = {
 			label: "Cédula",
 			type: "text",
 			required: true,
-			editable: false,
+			editable: true,
 		},
 		{
 			name: "name",
@@ -216,13 +216,7 @@ export const fieldSchemas = {
 			type: "text",
 			editable: true,
 		},
-		{
-			name: "parentId",
-			label: "Categoría padre",
-			type: "select",
-			options: [],
-			editable: true,
-		},
+
 		{
 			name: "status",
 			label: "Estado activo",

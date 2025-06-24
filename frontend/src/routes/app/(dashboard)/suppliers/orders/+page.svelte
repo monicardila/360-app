@@ -62,7 +62,6 @@
 	// Búsqueda
 	const handleSearch = async (event) => {
 		filters = event.detail.filters;
-		console.log("filtros-----------------------------: ", filters);
 		const isEmpty = Object.values(filters).every(
 			(value) => value === null || value === "",
 		);

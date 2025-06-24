@@ -6,15 +6,44 @@ const {
 const queries = require("../utils/queries");
 
 const customersController = {
+  // async getAll(req, res) {
+  //   try {
+  //     const customers = await queries.findAll("customers");
+  //     res.status(200).json(customers);
+  //   } catch (error) {
+  //     console.log(`Error finding customers: ${error.message}`);
+  //     res.status(500).json({ error: "Error finding customers" });
+  //   }
+  // },
+
+  // http://localhost:3000/api/v1/customers?includeInvoices=true
   async getAll(req, res) {
     try {
-      const customers = await queries.findAll("customers");
+      const includeInvoices = req.query.includeInvoices === "true";
+
+      const customers = await queries.findAll("customers", {
+        include: includeInvoices
+          ? {
+              customer_invoice: {
+                include: {
+                  invoice_content_customer: {
+                    include: {
+                      products: true,
+                    },
+                  },
+                },
+              },
+            }
+          : {},
+      });
+
       res.status(200).json(customers);
     } catch (error) {
       console.log(`Error finding customers: ${error.message}`);
       res.status(500).json({ error: "Error finding customers" });
     }
   },
+
   async getById(req, res) {
     try {
       const { id } = req.params;
@@ -22,7 +51,15 @@ const customersController = {
       const includeOptions =
         includeInvoices === "true"
           ? {
-              customer_invoice: true,
+              customer_invoice: {
+                include: {
+                  invoice_content_customer: {
+                    include: {
+                      products: true,
+                    },
+                  },
+                },
+              },
             }
           : {};
 

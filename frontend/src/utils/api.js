@@ -132,9 +132,11 @@ export default {
 	statusCategory: (status) => {
 		return apiClient.get(`/category/status?status=${status}`);
 	},
-	getAllCategory: async () => {
+	getAllCategory: async (includeProducts = false) => {
 		try {
-			const response = await apiClient.get(`/category`);
+			const response = await apiClient.get(
+				`/category${includeProducts ? "?includeProducts=true" : ""}`
+			);
 			console.log(`API`, response);
 			return response;
 		} catch (error) {
@@ -317,9 +319,20 @@ export default {
 	countCustomers: () => {
 		return apiClient.get(`/customers/count`);
 	},
-	getAllCustomers: () => {
-		return apiClient.get(`/customers`);
+	// getAllCustomers: () => {
+	// 	return apiClient.get(`/customers`);
+	// },
+	getAllCustomers: async (includeInvoices = false) => {
+		try {
+			const query = includeInvoices ? "?includeInvoices=true" : "";
+			const response = await apiClient.get(`/customers${query}`);
+			return response;
+		} catch (error) {
+			console.error("Error fetching customers from api.js:", error);
+			throw error;
+		}
 	},
+
 	getByIdCustomers: (id, options = {}) => {
 		const { includeInvoices } = options;
 		const queryString = includeInvoices

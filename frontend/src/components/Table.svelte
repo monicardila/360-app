@@ -6,6 +6,7 @@
 	export let data = [];
 	export let resourceName = ""; // <-- Ej: "products"
 	export let fieldSchema = []; // <-- campos como los de fieldSchemas.products
+	export let hideActions = false; // Por defecto muestra las acciones
 
 	let showEditForm = false;
 	let selectedModel = {};
@@ -47,9 +48,12 @@
 								>{col}</th
 							>
 						{/each}
-						<th class="border border-gray-300 px-4 py-2 text-center"
-							>Acciones</th
-						>
+						{#if !hideActions}
+							<th
+								class="border border-gray-300 px-4 py-2 text-center"
+								>Acciones</th
+							>
+						{/if}
 					</tr>
 				</thead>
 				<tbody>
@@ -58,41 +62,67 @@
 							{#each columns as col}
 								<td class="border border-gray-300 px-4 py-2">
 									{#if Array.isArray(row[col])}
-										<details class="cursor-pointer">
-											<summary
-												class="text-blue-600 underline"
-												>Ver lista</summary
-											>
-											<ul class="ml-4 list-disc">
-												{#each row[col] as item}
-													<li>
-														{item.id} - {item.name}
-													</li>
-												{/each}
-											</ul>
-										</details>
+										{#if col === "customer_invoice"}
+											<details class="cursor-pointer">
+												<summary
+													class="text-blue-600 underline"
+													>Ver productos</summary
+												>
+												{#if row[col].length > 0 && row[col].some((i) => i.invoice_content_customer?.length > 0)}
+													<ul class="ml-4 list-disc">
+														{#each row[col] as invoice}
+															{#each invoice.invoice_content_customer as content}
+																<li>
+																	{content
+																		.products
+																		?.name ??
+																		content.product_name ??
+																		"Sin nombre"}
+																</li>
+															{/each}
+														{/each}
+													</ul>
+												{:else}
+													<p
+														class="ml-4 text-gray-500 italic"
+													>
+														Sin compras
+													</p>
+												{/if}
+											</details>
+										{:else}
+											<!-- para otros arrays normales -->
+											<details class="cursor-pointer">
+												<summary
+													class="text-blue-600 underline"
+													>Ver lista</summary
+												>
+												<ul class="ml-4 list-disc">
+													{#each row[col] as item}
+														<li>
+															{item.id} - {item.name}
+														</li>
+													{/each}
+												</ul>
+											</details>
+										{/if}
 									{:else}
 										{row[col]}
 									{/if}
 								</td>
 							{/each}
 
-							<td
-								class="border border-gray-300 px-4 py-2 text-center"
-							>
-								<button
-									class="text-blue-600 hover:text-blue-800 mr-2"
-									on:click={() => handleEdit(row.id)}
-									title="Editar">✏️</button
+							{#if !hideActions}
+								<td
+									class="border border-gray-300 px-4 py-2 text-center"
 								>
-								<!-- <button
-									class="text-red-600 hover:text-red-800"
-									title="Eliminar"
-									on:click={() =>
-										console.log("Eliminar", row.id)}
-									>🗑️</button
-								> -->
-							</td>
+									<button
+										class="text-blue-600 hover:text-blue-800 mr-2"
+										on:click={() => handleEdit(row.id)}
+										title="Editar">✏️</button
+									>
+								</td>
+							{/if}
 						</tr>
 					{/each}
 				</tbody>
