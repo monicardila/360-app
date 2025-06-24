@@ -92,16 +92,19 @@ export default {
 	statusSupplier: (status) => {
 		return apiClient.get(`/suppliers/status?status=${status}`);
 	},
-	getAllSupplier: async () => {
+	getAllSupplier: async (includeProducts = false) => {
 		try {
-			const response = await apiClient.get(`/suppliers`);
-			console.log(`API`, response);
+			const response = await apiClient.get(
+				`/suppliers${includeProducts ? "?includeProducts=true" : ""}`
+			);
+			console.log("API response with products?", response);
 			return response;
 		} catch (error) {
 			console.error("Error fetching Suppliers from api.js:", error);
 			throw error;
 		}
 	},
+
 	getByIdSupplier: (id, options = {}) => {
 		const { includeProducts } = options;
 		const queryString = includeProducts
@@ -250,6 +253,11 @@ export default {
 	},
 	getByIdOrders: (id) => {
 		return apiClient.get(`/orders/${id}`);
+	},
+	getByDeliveryStatus: (filters) => {
+		return apiClient.get(
+			`/orders?delivery_status=${filters.delivery_status}`
+		);
 	},
 	createOrders: (data) => {
 		return apiClient.post(`/orders`, data);

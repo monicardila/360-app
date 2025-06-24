@@ -23,20 +23,27 @@
 		contact_name: null,
 		address: null,
 		deactivateAt: null,
+		delivery_status: null,
 	};
 
 	// Nueva prop para definir qué filtros mostrar en cada página
-	export let searchFields = ["id", "status", "name", "category", "price"];
-
+	export let searchFields = [
+		"id",
+		"status",
+		"name",
+		"category",
+		"price",
+		"delivery_status",
+	];
 	const handleSearch = () => {
 		console.log("Filtros antes de procesar:", filters);
-		const processedFilters = {};
 
-		// Recorremos los filtros y eliminamos valores vacíos o nulos
+		const processedFilters = {}; // <- ¡AQUÍ! Asegúrate de tener esta línea antes del for
+
 		for (const key in filters) {
 			if (filters[key] !== null && filters[key] !== "") {
 				if (key === "id" || key === "price") {
-					processedFilters[key] = Number(filters[key]); // Convertir números
+					processedFilters[key] = Number(filters[key]);
 				} else if (key === "status") {
 					processedFilters[key] =
 						filters[key] === "true"
@@ -44,8 +51,10 @@
 							: filters[key] === "false"
 								? false
 								: null;
+				} else if (key === "delivery_status") {
+					processedFilters[key] = filters[key]; // Enum en string como "RECIBIDA"
 				} else {
-					processedFilters[key] = filters[key]; // Mantener otros valores
+					processedFilters[key] = filters[key];
 				}
 			}
 		}
@@ -53,6 +62,7 @@
 		console.log("Processed filters:", processedFilters);
 		dispatch("search", { filters: processedFilters });
 	};
+
 	const handleClear = () => {
 		for (const key in filters) {
 			filters[key] = null;
@@ -93,6 +103,26 @@
 				<option value="">All</option>
 				<option value="true">Available</option>
 				<option value="false">Unavailable</option>
+			</select>
+		</div>
+	{/if}
+
+	{#if searchFields.includes("delivery_status")}
+		<div class="flex flex-col space-y-2 min-w-[15%]">
+			<label for="delivery_status" class="text-gray-700 font-medium">
+				Estado de entrega
+			</label>
+			<select
+				id="delivery_status"
+				bind:value={filters.delivery_status}
+				class="bg-slate-100 text-gray-600 rounded-xl w-54 p-2 h-full pl-10 px-6 outline-none"
+			>
+				<option value="">Todos</option>
+				<option value="EN_ESPERA">En espera</option>
+				<option value="RECIBIDA">Recibida</option>
+				<option value="RECHAZADA">Rechazada</option>
+				<option value="BORRADOR">Borrador</option>
+				<option value="APROBADA">Aprobada</option>
 			</select>
 		</div>
 	{/if}

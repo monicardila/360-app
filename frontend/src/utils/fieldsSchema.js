@@ -6,7 +6,7 @@ export const fieldSchemas = {
 			name: "id",
 			label: "ID",
 			type: "number",
-			required: true,
+			required: false,
 			editable: false,
 		},
 		{
@@ -62,11 +62,18 @@ export const fieldSchemas = {
 
 	suppliers: [
 		{
+			name: "id",
+			label: "ID",
+			type: "number",
+			required: false,
+			editable: false,
+		},
+		{
 			name: "nit",
 			label: "NIT",
 			type: "text",
 			required: true,
-			editable: false,
+			editable: true,
 		},
 		{
 			name: "name",
@@ -112,6 +119,13 @@ export const fieldSchemas = {
 	],
 
 	employees: [
+		{
+			name: "id",
+			label: "ID",
+			type: "number",
+			required: false,
+			editable: false,
+		},
 		{
 			name: "identification_card",
 			label: "Cédula",
@@ -183,6 +197,13 @@ export const fieldSchemas = {
 
 	categories: [
 		{
+			name: "id",
+			label: "ID",
+			type: "number",
+			required: false,
+			editable: false,
+		},
+		{
 			name: "name",
 			label: "Nombre",
 			type: "text",
@@ -211,6 +232,13 @@ export const fieldSchemas = {
 	],
 
 	branchStore: [
+		{
+			name: "id",
+			label: "ID",
+			type: "number",
+			required: false,
+			editable: false,
+		},
 		{
 			name: "name",
 			label: "Nombre de la sucursal",
@@ -249,6 +277,20 @@ export const fieldSchemas = {
 
 	orders: [
 		{
+			name: "id",
+			label: "ID",
+			type: "number",
+			required: false,
+			editable: false,
+		},
+		{
+			name: "order_date",
+			label: "Fecha de orden",
+			type: "date", // o "date" si usas input tipo fecha
+			required: true,
+			editable: true,
+		},
+		{
 			name: "supplier_nit",
 			label: "Proveedor",
 			type: "select",
@@ -272,6 +314,20 @@ export const fieldSchemas = {
 			required: true,
 			editable: true,
 		},
+		// {
+		// 	name: "delivery_status",
+		// 	label: "Estado de entrega",
+		// 	type: "select",
+		// 	required: true,
+		// 	editable: true,
+		// 	options: [
+		// 		{ id: "BORRADOR", name: "Borrador" },
+		// 		{ id: "EN_ESPERA", name: "En espera" },
+		// 		{ id: "APROBADA", name: "Aprobada" },
+		// 		{ id: "RECHAZADA", name: "Rechazada" },
+		// 		{ id: "RECIBIDA", name: "Recibida" },
+		// 	],
+		// },
 		{
 			name: "delivery_status",
 			label: "Estado de entrega",

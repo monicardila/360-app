@@ -12,8 +12,11 @@
 	let initialized = false;
 
 	function initializeFormData() {
+		console.log("valores formulario: ---------------");
+
 		const temp = {};
 		for (const field of fields) {
+			//if (field.name === "id") continue;
 			temp[field.name] =
 				model?.[field.name] ?? (field.type === "checkbox" ? false : "");
 		}
@@ -33,6 +36,9 @@
 	});
 
 	function handleSubmit(e) {
+		if (formData.order_date) {
+			formData.order_date = new Date(formData.order_date).toISOString();
+		}
 		console.log("formData al enviar:", formData);
 
 		e.preventDefault();
@@ -62,76 +68,91 @@
 			x
 		</button>
 		{#each fields as field}
-			<div>
-				<label
-					for={field.name}
-					class="block mb-1 text-sm font-medium text-gray-700"
-				>
-					{field.label}
-				</label>
-
-				{#if field.type === "select"}
-					<select
-						id={field.name}
-						bind:value={formData[field.name]}
-						class="w-full border border-gray-300 p-2 rounded"
-						required={field.required}
-						disabled={!field.editable}
+			{#if field.name === "id"}
+				<!-- Campo oculto solo para enviar el ID en formData -->
+				<input type="hidden" id="id" bind:value={formData.id} />
+			{:else}
+				<!-- Renderiza los campos visibles como ya lo haces -->
+				<div>
+					<label
+						for={field.name}
+						class="block mb-1 text-sm font-medium text-gray-700"
 					>
-						<option value="">Seleccione una opción</option>
-						{#each field.options as opt}
-							<option value={opt.id}>{opt.name}</option>
-						{/each}
-					</select>
-				{:else if field.type === "checkbox"}
-					<div class="flex items-center">
+						{field.label}
+					</label>
+
+					{#if field.type === "select"}
+						<select
+							id={field.name}
+							bind:value={formData[field.name]}
+							class="w-full border border-gray-300 p-2 rounded"
+							required={field.required}
+							disabled={!field.editable}
+						>
+							<option value="">Seleccione una opción</option>
+							{#each field.options as opt}
+								<option value={opt.id}>{opt.name}</option>
+							{/each}
+						</select>
+					{:else if field.type === "checkbox"}
+						<div class="flex items-center">
+							<input
+								id={field.name}
+								type="checkbox"
+								bind:checked={formData[field.name]}
+								class="mr-2"
+								disabled={!field.editable}
+							/>
+							<span class="text-sm text-gray-600">Activado</span>
+						</div>
+					{:else if field.type === "textarea"}
+						<textarea
+							id={field.name}
+							bind:value={formData[field.name]}
+							class="w-full border border-gray-300 p-2 rounded"
+							required={field.required}
+							disabled={!field.editable}
+						></textarea>
+					{:else if field.type === "number"}
 						<input
 							id={field.name}
-							type="checkbox"
-							bind:checked={formData[field.name]}
-							class="mr-2"
+							type="number"
+							bind:value={formData[field.name]}
+							class="w-full border border-gray-300 p-2 rounded"
+							required={field.required}
 							disabled={!field.editable}
 						/>
-						<span class="text-sm text-gray-600">Activado</span>
-					</div>
-				{:else if field.type === "textarea"}
-					<textarea
-						id={field.name}
-						bind:value={formData[field.name]}
-						class="w-full border border-gray-300 p-2 rounded"
-						required={field.required}
-						disabled={!field.editable}
-					></textarea>
-				{:else if field.type === "number"}
-					<input
-						id={field.name}
-						type="number"
-						bind:value={formData[field.name]}
-						class="w-full border border-gray-300 p-2 rounded"
-						required={field.required}
-						disabled={!field.editable}
-					/>
-				{:else if field.type === "email"}
-					<input
-						id={field.name}
-						type="email"
-						bind:value={formData[field.name]}
-						class="w-full border border-gray-300 p-2 rounded"
-						required={field.required}
-						disabled={!field.editable}
-					/>
-				{:else}
-					<!-- Campo tipo texto por defecto -->
-					<input
-						id={field.name}
-						type="text"
-						bind:value={formData[field.name]}
-						class="w-full border border-gray-300 p-2 rounded"
-						required={field.required}
-						disabled={!field.editable}
-					/>
-				{/if}
-			</div>
+					{:else if field.type === "email"}
+						<input
+							id={field.name}
+							type="email"
+							bind:value={formData[field.name]}
+							class="w-full border border-gray-300 p-2 rounded"
+							required={field.required}
+							disabled={!field.editable}
+						/>
+					{:else if field.type === "date"}
+						<input
+							id={field.name}
+							type="date"
+							bind:value={formData[field.name]}
+							class="w-full border border-gray-300 p-2 rounded"
+							required={field.required}
+							disabled={!field.editable}
+						/>
+					{:else}
+						<!-- Campo tipo texto por defecto -->
+						<input
+							id={field.name}
+							type="text"
+							bind:value={formData[field.name]}
+							class="w-full border border-gray-300 p-2 rounded"
+							required={field.required}
+							disabled={!field.editable}
+						/>
+					{/if}
+				</div>
+			{/if}
 		{/each}
 
 		<div class="flex justify-end mt-6">

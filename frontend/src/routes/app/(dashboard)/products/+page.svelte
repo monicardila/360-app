@@ -9,7 +9,6 @@
 
 	let filters = { id: null, status: null, all: true };
 	let showForm = false;
-
 	let productFields = [];
 
 	// Al montar, carga productos, proveedores y categorías

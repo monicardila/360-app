@@ -19,7 +19,7 @@
 
 	async function handleUpdate(updatedData) {
 		await updateModel(resourceName, updatedData.id, updatedData);
-		await loadData(resourceName, "all");
+		await loadData(resourceName, "all", { includeProducts: true });
 		showEditForm = false;
 	}
 </script>
@@ -56,10 +56,27 @@
 					{#each data as row}
 						<tr class="hover:bg-gray-50">
 							{#each columns as col}
-								<td class="border border-gray-300 px-4 py-2"
-									>{row[col]}</td
-								>
+								<td class="border border-gray-300 px-4 py-2">
+									{#if Array.isArray(row[col])}
+										<details class="cursor-pointer">
+											<summary
+												class="text-blue-600 underline"
+												>Ver lista</summary
+											>
+											<ul class="ml-4 list-disc">
+												{#each row[col] as item}
+													<li>
+														{item.id} - {item.name}
+													</li>
+												{/each}
+											</ul>
+										</details>
+									{:else}
+										{row[col]}
+									{/if}
+								</td>
 							{/each}
+
 							<td
 								class="border border-gray-300 px-4 py-2 text-center"
 							>

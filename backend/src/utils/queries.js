@@ -6,7 +6,7 @@ const queries = {
   },
   findById: async (model, id, includeOptions = {}) => {
     return await prisma[model].findUnique({
-      where: { id },
+      where: { id: Number(id) },
       include: includeOptions, // By default, it includes nothing
     });
   },

@@ -58,6 +58,7 @@ const modelConfig = {
 		fetchers: {
 			all: api.getAllOrders,
 			byId: api.getByIdOrders,
+			byStatus: api.getByDeliveryStatus,
 			// filter by status
 		},
 		actions: {
@@ -124,7 +125,7 @@ export async function loadData(type, operation, filters = {}) {
 		}
 
 		const { store, fetchers } = config;
-		const fetcher = fetchers[operation];
+		const fetcher = fetchers[operation]; // => fetchers["status"] => api.getByDeliveryStatus <- ejemplo
 
 		if (!fetcher) {
 			throw new Error(`Operation not supported ${operation}`);
@@ -133,13 +134,18 @@ export async function loadData(type, operation, filters = {}) {
 		let response;
 
 		if (operation === "all") {
-			response = await fetcher();
+			response = await fetcher(filters);
 		} else if (operation === "byName" && filters.name) {
 			response = await fetcher(filters.name);
 		} else if (operation === "byStatus" && filters.status !== undefined) {
 			response = await fetcher(filters.status);
 		} else if (operation === "byId" && filters.id) {
-			response = await fetcher(filters.id);
+			const extraParams = {};
+			if (filters.includeProducts) extraParams.includeProducts = true;
+			response = await fetcher(filters.id, extraParams);
+		} else if (operation === "byStatus" && filters.delivery_status) {
+			// 🔥 ESTA ES LA LÍNEA CLAVE QUE TE FALTABA
+			response = await fetcher(filters);
 		} else {
 			throw new Error(
 				`Unsupported operation or missing filters: ${operation}`
@@ -176,6 +182,9 @@ export async function updateModel(type, id, data) {
 
 export async function createModel(type, data) {
 	try {
+		if ("id" in data) {
+			delete data.id;
+		}
 		const config = modelConfig[type];
 		if (!config || !config.actions || !config.actions.create) {
 			throw new Error(`Create not supported for model: ${type}`);
