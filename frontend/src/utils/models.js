@@ -141,7 +141,14 @@ export async function loadData(type, operation, filters = {}) {
 			response = await fetcher(filters.status);
 		} else if (operation === "byId" && filters.id) {
 			const extraParams = {};
-			if (filters.includeProducts) extraParams.includeProducts = true;
+
+			if (filters.includeProducts) {
+				extraParams.includeProducts = true;
+			}
+			if (filters.includeInvoices) {
+				extraParams.includeInvoices = true;
+			}
+
 			response = await fetcher(filters.id, extraParams);
 		} else if (operation === "byStatus" && filters.delivery_status) {
 			response = await fetcher(filters);

@@ -4,12 +4,24 @@ const queries = {
   findAll: async (model, options = {}) => {
     return await prisma[model].findMany(options);
   },
-  findById: async (model, id, includeOptions = {}) => {
+  // findById: async (model, id, includeOptions = {}) => {
+  //   return await prisma[model].findUnique({
+  //     where: { id },
+  //     include: includeOptions, // By default, it includes nothing
+  //   });
+  // },
+  findById: async (model, identifier, includeOptions = {}) => {
+    const isNumber =
+      typeof identifier === "number" || !isNaN(Number(identifier));
+
     return await prisma[model].findUnique({
-      where: { id: Number(id) },
-      include: includeOptions, // By default, it includes nothing
+      where: isNumber
+        ? { id: Number(identifier) }
+        : { identification_card: identifier },
+      include: includeOptions,
     });
   },
+
   findByName: async (model, name = {}) => {
     return await prisma[model].findUnique({
       where: { name },

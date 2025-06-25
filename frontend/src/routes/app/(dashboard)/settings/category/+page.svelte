@@ -16,12 +16,9 @@
 			loadData("categories", "all", { includeProducts: true }),
 			loadData("products", "all"),
 		]);
-
 		categoryFields = fieldSchemas.categories
-			// 🔴 Aquí quitamos el campo que no quieres mostrar
 			.filter((field) => field.name !== "parentId")
 			.map((field) => {
-				// ✅ Y aquí le damos los productos como opciones
 				if (field.name === "products") {
 					return {
 						...field,
@@ -44,7 +41,10 @@
 		if (isEmpty) {
 			await loadData("categories", "all", filters);
 		} else if (filters.id) {
-			await loadData("categories", "byId", filters);
+			await loadData("categories", "byId", {
+				...filters,
+				includeProducts: true, // 👈🏼 Esto es lo que faltaba
+			});
 		} else if (filters.status !== null && filters.status !== undefined) {
 			await loadData("categories", "byStatus", filters);
 		} else if (filters.name) {
