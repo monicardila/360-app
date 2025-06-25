@@ -41,7 +41,7 @@
 				console.log("Autenticado con éxito:", data.token, data.role);
 
 				alert("Login exitoso");
-				window.location.href = "/app";
+				window.location.href = "/app/cashier";
 			} else {
 				throw new Error("Respuesta del servidor incompleta");
 			}

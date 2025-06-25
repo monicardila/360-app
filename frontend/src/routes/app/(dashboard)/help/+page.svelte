@@ -1,6 +1,6 @@
 <!--  mensaje de contacto, numeros de celular, whatsapp de ayuda, video de como funciona cada parte de la app -->
 
-<div class=" p-4 mx-auto max-w-[1400px] font-primary mt-20">
+<div class=" p-4 mx-auto max-w-[1400px] font-primary h-screen pt-20">
 	<!-- title main -->
 	<p class="mb-20 text-2xl md:text-4xl text-right text-primary">
 		Necesitas ayuda? <br /> nuestro equipo esta para servirte <br />

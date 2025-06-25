@@ -93,16 +93,16 @@
 	{#if searchFields.includes("status")}
 		<div class="flex flex-col space-y-2 min-w-[15%]">
 			<label for="search-status" class="text-gray-700 font-medium"
-				>Status</label
+				>Estado</label
 			>
 			<select
 				id="search-status"
 				bind:value={filters.status}
 				class="text-gray-600 rounded-xl w-54 p-2 h-full pl-10 outline-none bg-slate-100"
 			>
-				<option value="">All</option>
-				<option value="true">Available</option>
-				<option value="false">Unavailable</option>
+				<option value="">Todo</option>
+				<option value="true">Disponible</option>
+				<option value="false">Desactivado</option>
 			</select>
 		</div>
 	{/if}
@@ -130,7 +130,7 @@
 	{#if searchFields.includes("name")}
 		<div class="flex flex-col space-y-2 min-w-[15%]">
 			<label for="search-name" class="text-gray-700 font-medium"
-				>Name</label
+				>Nombre</label
 			>
 			<input
 				type="text"
@@ -181,14 +181,14 @@
 		class="border-2 border-slate-300 bg-cyan-600 text-white rounded-xl p-3 px-6 mt-8 font-medium"
 		disabled={$loading}
 	>
-		{$loading ? "Loading..." : "Search"}
+		{$loading ? "Cargando..." : "Buscar"}
 	</button>
 
 	<button
 		on:click={handleClear}
 		class="border-2 font-semibold border-slate-300 bg-red-300 text-white rounded-xl p-3 px-6 mt-8"
 	>
-		All
+		Todo
 	</button>
 </form>
 

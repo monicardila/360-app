@@ -69,7 +69,7 @@
 </script>
 
 <!-- Vista de Suppliers -->
-<div class="relative w-auto">
+<div class="relative w-auto h-screen pt-10">
 	{#if showForm}
 		<FormCreateUpdate
 			fields={supplierFields}
@@ -79,7 +79,10 @@
 		/>
 	{/if}
 
-	<div class="mt-24 w-auto border">
+	<div class="w-auto border">
+		<h5 class="right-10 absolute mt-16 font-medium hidden xl:block">
+			Proveedores
+		</h5>
 		<SearchBar
 			bind:filters
 			on:search={handleSearch}

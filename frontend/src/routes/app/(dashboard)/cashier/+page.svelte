@@ -149,13 +149,13 @@
 </script>
 
 {#if role === "admin"}
-	<section class="min-h-screen flex items-center justify-center">
+	<section class="min-h-screen flex items-center justify-center pt-14">
 		<div
-			class="w-full mx-auto relative flex flex-wrap gap-2 text-sm justify-center mt-16"
+			class="w-full mx-auto relative flex flex-wrap gap-2 text-sm justify-center"
 		>
 			<!-- Contenedor Izquierdo -->
 			<div
-				class="hidden xl:block max-w-lg bg-white flex-grow drop-shadow-lg border border-gray-200 min-h-[440px] top-0"
+				class="hidden xl:block max-w-lg bg-white flex-grow drop-shadow-lg border border-gray-200 max-h-[440px] top-0"
 			>
 				<!-- tabla -->
 				<SearchBar
@@ -175,7 +175,7 @@
 
 			<!-- Contenedor Central -->
 			<div
-				class="hidden md:block mx-auto xl:mx-2 min-w-[150px] max-w-2xl bg-white p-8 shadow-md flex-grow mt-0 drop-shadow-lg border border-gray-200 max-h-[578px]"
+				class="hidden md:block mx-auto xl:mx-2 min-w-[150px] max-w-2xl bg-white p-8 shadow-md flex-grow mt-0 drop-shadow-lg border border-gray-200 h-[636px]"
 			>
 				<h1 class="text-3xl font-bold pb-3">Orden de venta</h1>
 				<div class="relative">

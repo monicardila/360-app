@@ -107,7 +107,7 @@
 </script>
 
 <!-- Vista de Orders -->
-<div class="relative w-auto">
+<div class="relative w-auto h-screen pt-10">
 	{#if showForm}
 		<FormCreateUpdate
 			fields={orderFields}
@@ -117,7 +117,10 @@
 		/>
 	{/if}
 
-	<div class="mt-24 w-auto border">
+	<div class="w-auto border">
+		<h5 class="right-10 absolute mt-16 font-medium hidden xl:block">
+			Ordenes
+		</h5>
 		<SearchBar
 			bind:filters
 			on:search={handleSearch}

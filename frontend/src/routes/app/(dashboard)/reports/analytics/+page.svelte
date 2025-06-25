@@ -1,7 +1,7 @@
-<section class=" p-4 mx-auto max-w-[1400px] border font-primary">
+<section class=" p-4 mx-auto max-w-[1400px] border font-primary h-screen">
 	<!-- title main -->
 	<p
-		class="mb-20 mr-8 text-3xl md:text-4xl text-right text-primary font-bold"
+		class=" mr-8 text-3xl md:text-4xl text-right text-primary font-bold pt-24"
 	>
 		Reportes
 	</p>
@@ -269,6 +269,3 @@
 		</div>
 	</div>
 </section>
-
-<!-- temporary div -->
-<div class="h-[200px]"></div>

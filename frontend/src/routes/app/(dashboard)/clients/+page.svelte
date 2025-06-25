@@ -47,12 +47,19 @@
 	const columns = ["id", "identification_card", "customer_invoice"];
 </script>
 
-<h5 class="right-20 absolute mt-16 font-medium">Customer</h5>
+<div class=" h-screen pt-10">
+	<main class="bg-slate-100 overflow-auto">
+		<h5 class="right-20 absolute mt-16 font-medium hidden md:block">
+			Clientes
+		</h5>
+		<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+		<SearchBar
+			bind:filters
+			on:search={handleSearch}
+			searchFields={["id"]}
+		/>
 
-<div class="mt-24">
-	<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
-	<SearchBar bind:filters on:search={handleSearch} searchFields={["id"]} />
-
-	<!-- Usar el componente Table con columnas y datos -->
-	<Table {columns} data={$customer} hideActions={true} />
+		<!-- Usar el componente Table con columnas y datos -->
+		<Table {columns} data={$customer} hideActions={true} />
+	</main>
 </div>

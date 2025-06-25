@@ -93,7 +93,7 @@
 </script>
 
 <!-- Vista -->
-<div class="relative w-auto">
+<div class="relative w-auto h-screen pt-10">
 	<!-- <h5 class="right-20 absolute font-medium">Products</h5> -->
 
 	{#if showForm}
@@ -105,12 +105,16 @@
 		/>
 	{/if}
 
-	<div class="mt-24 w-auto border">
+	<div class="w-auto border">
+		<h5 class="right-10 absolute mt-16 font-medium hidden xl:block">
+			Productos
+		</h5>
 		<SearchBar
 			bind:filters
 			on:search={handleSearch}
 			searchFields={["id", "status", "name"]}
 		/>
+
 		<button
 			on:click={openForm}
 			class="fixed bottom-6 right-6 z-50 bg-green-600 text-white text-3xl w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-green-700 transition"

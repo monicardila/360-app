@@ -93,7 +93,7 @@
 	];
 </script>
 
-<div class="relative w-auto">
+<div class="relative w-auto h-screen pt-10">
 	{#if showForm}
 		<FormCreateUpdate
 			fields={employeeFields}
@@ -103,7 +103,10 @@
 		/>
 	{/if}
 
-	<div class="mt-24 w-auto border">
+	<div class=" w-auto border">
+		<h5 class="right-10 absolute mt-16 font-medium hidden xl:block">
+			Empleados
+		</h5>
 		<SearchBar
 			bind:filters
 			on:search={handleSearch}
