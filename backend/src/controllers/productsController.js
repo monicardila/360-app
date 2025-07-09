@@ -123,36 +123,6 @@ const productsController = {
     }
   },
 
-  //async update(req, res) {
-  //  try {
-  //    const { id } = req.params;
-  //    const data = req.body;
-  //    delete data.orders;
-  //
-  //    if (!id || isNaN(Number(id))) {
-  //      return res.status(400).json({ error: "Invalid products ID" });
-  //    }
-  //
-  //    if (!data || typeof data !== "object" || Array.isArray(data)) {
-  //      return res
-  //        .status(400)
-  //        .json({ error: "Invalid request body. Expected an object." });
-  //    }
-  //
-  //    const products = await queries.update("products", Number(id), data);
-  //
-  //    console.log("Updating products with ID:", id, "Data:", data);
-  //
-  //    if (!products) {
-  //      return res.status(404).json({ error: "products not found" });
-  //    }
-  //
-  //    res.status(200).json(products);
-  //  } catch (error) {
-  //    console.error(`Error updating products: ${error.message}`);
-  //    res.status(500).json({ error: "Error updating products" });
-  //  }
-  //},
   async count(req, res) {
     try {
       const products = await queries.count("products");

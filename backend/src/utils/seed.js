@@ -147,18 +147,3 @@ main()
     prisma.$disconnect();
     process.exit(1);
   });
-
-// order -- creation
-
-// principal -> *
-// branch_store *
-// employees *
-// supplier *
-// categories
-// products *
-// orders *
-// supplier_invoices
-// invoice_content_supplier
-// customer *
-// customer_invoice
-// invoice_content_customer

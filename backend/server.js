@@ -80,7 +80,3 @@ process.on("SIGINT", async () => {
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
-
-// // 1. Productos con stock bajo
-// // 2. Categorías más vendidas
-// // 3. Branch stores con más ventas

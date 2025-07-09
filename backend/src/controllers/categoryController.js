@@ -2,16 +2,6 @@ const { products } = require("../utils/prismaClient");
 const queries = require("../utils/queries");
 
 const categoryControllers = {
-  // async getAll(req, res) {
-  //   try {
-  //     const category = await queries.findAll("category");
-  //     res.status(200).json(category);
-  //   } catch (error) {
-  //     console.log(`Error finding category: ${error.message}`);
-  //     res.status(500).json({ error: "Error finding category" });
-  //   }
-  // },
-
   async getAll(req, res) {
     try {
       const { includeProducts } = req.query;

@@ -1,23 +1,3 @@
-// const jwt = require("jsonwebtoken");
-// const { SECRET_JWT_KEY } = require("../../config");
-
-// const authenticate = (req, res, next) => {
-//   const token = req.cookies.token;
-//   if (!token) {
-//     return res.status(401).json({ error: "NO authorized" });
-//   }
-
-//   try {
-//     const decoded = jwt.verify(token, SECRET_JWT_KEY);
-//     req.user = decoded;
-//     next();
-//   } catch (error) {
-//     res.status(401).json({ error: "Invalided token" });
-//   }
-// };
-
-// module.exports = authenticate;
-
 const jwt = require("jsonwebtoken");
 const { SECRET_JWT_KEY } = require("../../config");
 

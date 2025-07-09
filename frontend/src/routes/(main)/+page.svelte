@@ -191,7 +191,7 @@
 			>
 				<div class="aspect-video">
 					<iframe
-						src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+						src="https://www.youtube.com/embed/jC_-06jd-TI"
 						frameborder="0"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 						allowfullscreen
