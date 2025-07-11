@@ -51,7 +51,9 @@ Esto iniciará un contenedor con PostgreSQL y la base de datos configurada.
 
 Crea un archivo .env en la carpeta backend y agrega:
 
-DATABASE_URL="postgresql://admin:admin@localhost:5432/tres60?schema=public"
+Puedes copiar el archivo de ejemplo y modificarlo si lo necesitas:
+
+cp backend/.env.example backend/.env
 
 📌 5. Ejecutar la Aplicación
 
