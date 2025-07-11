@@ -1,23 +1,19 @@
-# Usa Node.js 20 como base
-FROM node:20
+FROM node:20 AS build
 
-# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
-
-# Copia los archivos de dependencias
 COPY package.json package-lock.json ./
 
-# Instala las dependencias
-RUN npm install
+# Instalación limpia
+RUN npm ci --omit=dev
 
-# Copia el resto del código del backend
+# Copia el código y el prisma schema
 COPY . .
 
-# Genera las migraciones de Prisma y ejecuta la migración
+# Genera el cliente de Prisma para Linux
 RUN npx prisma generate
 
-# Expone el puerto del backend
-EXPOSE 3000
+# Reconstruye bcrypt si usas
+RUN npm rebuild bcrypt --build-from-source
 
-# Comando de inicio
-CMD ["npm", "start"]
+EXPOSE 3000
+CMD ["node", "server.js"]

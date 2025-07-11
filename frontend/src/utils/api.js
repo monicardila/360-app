@@ -2,7 +2,7 @@ import axios from "axios";
 import { error } from "../stores/shared";
 
 const apiClient = axios.create({
-	baseURL: "http://localhost:3000/api/v1",
+	baseURL: "http://localhost:3100/api/v1",
 	headers: {
 		"Content-Type": "application/json",
 	},
