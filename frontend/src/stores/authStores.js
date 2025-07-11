@@ -12,7 +12,7 @@ export const auth = writable({
 	role: storedRole,
 });
 
-// ✅ Función para actualizar la autenticación en cualquier parte del código
+//  Función para actualizar la autenticación en cualquier parte del código
 export function setAuth(token, role) {
 	auth.set({
 		isAuthenticated: !!token,
@@ -26,7 +26,7 @@ export function setAuth(token, role) {
 	}
 }
 
-// ✅ Función para obtener datos desde cookies si localStorage no está disponible
+//  Función para obtener datos desde cookies si localStorage no está disponible
 export function updateAuthFromCookie() {
 	if (!isBrowser) return;
 
@@ -45,7 +45,7 @@ export function updateAuthFromCookie() {
 	}
 }
 
-// ✅ Función para cerrar sesión y limpiar todo
+//  Función para cerrar sesión y limpiar todo
 export function logout() {
 	auth.set({ isAuthenticated: false, token: null, role: null });
 

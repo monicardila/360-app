@@ -2,7 +2,7 @@ import axios from "axios";
 import { error } from "../stores/shared";
 
 const apiClient = axios.create({
-	baseURL: "http://localhost:3000/api/v1",
+	baseURL: "http://localhost:3100/api/v1",
 	headers: {
 		"Content-Type": "application/json",
 	},
@@ -87,39 +87,42 @@ export default {
 
 	// supplier *
 	countSupplier: () => {
-		return apiClient.get(`/supplier/count`);
+		return apiClient.get(`/suppliers/count`);
 	},
 	statusSupplier: (status) => {
-		return apiClient.get(`/supplier/status?status=${status}`);
+		return apiClient.get(`/suppliers/status?status=${status}`);
 	},
-	getAllSupplier: async () => {
+	getAllSupplier: async (includeProducts = false) => {
 		try {
-			const response = await apiClient.get(`/suppliers`);
-			console.log(`API`, response);
+			const response = await apiClient.get(
+				`/suppliers${includeProducts ? "?includeProducts=true" : ""}`
+			);
+			console.log("API response with products?", response);
 			return response;
 		} catch (error) {
 			console.error("Error fetching Suppliers from api.js:", error);
 			throw error;
 		}
 	},
+
 	getByIdSupplier: (id, options = {}) => {
 		const { includeProducts } = options;
 		const queryString = includeProducts
 			? `?includeProducts=${includeProducts}`
 			: "";
-		return apiClient.get(`/supplier/${id}${queryString}`);
+		return apiClient.get(`/suppliers/${id}${queryString}`);
 	},
 	createSupplier: (data) => {
-		return apiClient.post(`/supplier`, data);
+		return apiClient.post(`/suppliers`, data);
 	},
 	updateSupplier: (id, data) => {
-		return apiClient.put(`/supplier/${id}`, data);
+		return apiClient.put(`/suppliers/${id}`, data);
 	},
 	deactivateSupplier: (id) => {
-		return apiClient.put(`/supplier/deactivate/${id}`);
+		return apiClient.put(`/suppliers/deactivate/${id}`);
 	},
 	activateSupplier: (id) => {
-		return apiClient.put(`/supplier/activate/${id}`);
+		return apiClient.put(`/suppliers/activate/${id}`);
 	},
 
 	// categories
@@ -129,9 +132,11 @@ export default {
 	statusCategory: (status) => {
 		return apiClient.get(`/category/status?status=${status}`);
 	},
-	getAllCategory: async () => {
+	getAllCategory: async (includeProducts = false) => {
 		try {
-			const response = await apiClient.get(`/category`);
+			const response = await apiClient.get(
+				`/category${includeProducts ? "?includeProducts=true" : ""}`
+			);
 			console.log(`API`, response);
 			return response;
 		} catch (error) {
@@ -161,7 +166,7 @@ export default {
 
 	// products *
 	countProducts: () => {
-		return apiClient.get(`/products/count`);
+		return apiClient.get(`/products/count`); // ESTA FALLANDO
 	},
 	// statusProducts: async (status) => {
 	// 	if (typeof status !== "boolean") {
@@ -251,6 +256,11 @@ export default {
 	getByIdOrders: (id) => {
 		return apiClient.get(`/orders/${id}`);
 	},
+	getByDeliveryStatus: (filters) => {
+		return apiClient.get(
+			`/orders?delivery_status=${filters.delivery_status}`
+		);
+	},
 	createOrders: (data) => {
 		return apiClient.post(`/orders`, data);
 	},
@@ -309,9 +319,20 @@ export default {
 	countCustomers: () => {
 		return apiClient.get(`/customers/count`);
 	},
-	getAllCustomers: () => {
-		return apiClient.get(`/customers`);
+	// getAllCustomers: () => {
+	// 	return apiClient.get(`/customers`);
+	// },
+	getAllCustomers: async (includeInvoices = false) => {
+		try {
+			const query = includeInvoices ? "?includeInvoices=true" : "";
+			const response = await apiClient.get(`/customers${query}`);
+			return response;
+		} catch (error) {
+			console.error("Error fetching customers from api.js:", error);
+			throw error;
+		}
 	},
+
 	getByIdCustomers: (id, options = {}) => {
 		const { includeInvoices } = options;
 		const queryString = includeInvoices
@@ -371,5 +392,55 @@ export default {
 	},
 	updateInvoiceContentCustomer: (id, data) => {
 		return apiClient.put(`/invoiceContentCustomer/${id}`, data);
+	},
+
+	// cart
+	getAllCart: () => {
+		return apiClient.get(`/cart`);
+	},
+	getByIdCart: (id, options = {}) => {
+		const { includeCartItem } = options;
+		const queryString = includeCartItem
+			? `?includeCartItem=${includeCartItem}`
+			: "";
+		return apiClient.get(`/cart/${id}${queryString}`);
+	},
+	createCart: (data) => {
+		return apiClient.post(`/cart`, data);
+	},
+	updateCart: (id, data) => {
+		return apiClient.put(`/cart/${id}`, data);
+	},
+	deleteCart: (id, data) => {
+		return apiClient.delete(`/cart/${id}`, data);
+	},
+
+	// cart item
+	countOrders: () => {
+		return apiClient.get(`/cartItem/count`);
+	},
+	getAllCartItem: () => {
+		return apiClient.get(`/cartItem`);
+	},
+	getByIdCartItem: (id, options = {}) => {
+		const { includeProducts } = options;
+		const queryString = includeProducts
+			? `?includeProducts=${includeProducts}`
+			: "";
+		return apiClient.get(`/cartItem/${id}${queryString}`);
+	},
+	createCartItem: (data) => {
+		return apiClient.post(`/cartItem`, data);
+	},
+	updateCartItem: (id, data) => {
+		return apiClient.put(`/cartItem/${id}`, data);
+	},
+	deleteCartItem: (id, data) => {
+		return apiClient.delete(`/cartItem/${id}`, data);
+	},
+
+	// venta
+	createSale: (data) => {
+		return apiClient.post(`/sales`, data);
 	},
 };

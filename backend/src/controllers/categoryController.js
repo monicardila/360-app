@@ -4,13 +4,26 @@ const queries = require("../utils/queries");
 const categoryControllers = {
   async getAll(req, res) {
     try {
-      const category = await queries.findAll("category");
-      res.status(200).json(category);
+      const { includeProducts } = req.query;
+
+      const includeOptions =
+        includeProducts === "true"
+          ? {
+              include: {
+                products: true,
+                parent: true,
+              },
+            }
+          : {};
+
+      const categories = await queries.findAll("category", includeOptions);
+      res.status(200).json(categories);
     } catch (error) {
       console.log(`Error finding category: ${error.message}`);
       res.status(500).json({ error: "Error finding category" });
     }
   },
+
   //FOCUS
   async getById(req, res) {
     try {
@@ -53,6 +66,10 @@ const categoryControllers = {
     try {
       const { id } = req.params;
       const data = req.body;
+
+      if (data.parentId === "") {
+        data.parentId = null;
+      }
       if (!id || isNaN(Number(id))) {
         return res.status(400).json({ error: "Invalid category ID" });
       }

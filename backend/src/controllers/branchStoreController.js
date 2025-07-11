@@ -1,4 +1,3 @@
-const { employees } = require("../utils/prismaClient");
 const queries = require("../utils/queries");
 
 const branchStoreControllers = {

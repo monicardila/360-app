@@ -19,7 +19,7 @@
 
 		try {
 			const response = await fetch(
-				"http://localhost:3000/api/v1/auth/login",
+				"http://localhost:3100/api/v1/auth/login",
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -41,7 +41,7 @@
 				console.log("Autenticado con éxito:", data.token, data.role);
 
 				alert("Login exitoso");
-				window.location.href = "/app";
+				window.location.href = "/app/cashier";
 			} else {
 				throw new Error("Respuesta del servidor incompleta");
 			}

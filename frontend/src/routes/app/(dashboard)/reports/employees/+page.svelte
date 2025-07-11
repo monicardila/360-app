@@ -1,104 +1,46 @@
-<!--<script>
-	import { onMount } from "svelte";
-	import {
-		employees,
-		loadEmployees,
-		loading,
-		error,
-	} from "../../../../../stores/models";
-
-	onMount(() => {
-		console.log("Calling loadEmployees...");
-		loadEmployees();
-	});
-</script>
--->
-
-<!-- th: columns, tr:cells -->
-<!--{#if $loading}
-	<p>Loading data...</p>
-{:else if $employees && $employees.length > 0}
-	<section>
-		<h2>EMPLOYEES</h2>
-		<table
-			class="table-auto border-collapse border border-gray-300 w-full text-left text-sm"
-		>
-			<thead>
-				<tr class="bg-gray-100">
-					<th class="border border-gray-300 px-4 py-2">ID</th>
-					<th class="border border-gray-300 px-4 py-2">Rol</th>
-					<th class="border border-gray-300 px-4 pt-2">Name</th>
-					<th class="border border-gray-300 px-4 py-2">Phone</th>
-					<th class="border border-gray-300 px-4 py-2">Email</th>
-					<th class="border border-gray-300 px-4 py-2">Salary</th>
-					<th class="border border-gray-300 px-4 py-2"
-						>Bank_account</th
-					>
-					<th class="border border-gray-300 px-4 py-2"
-						>Branch_store</th
-					>
-					<th class="border border-gray-300 px-4 py-2">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each $employees as employee}
-					<tr class="hover:bg-gray-50">
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.rol}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.name}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.phone}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.email}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.salary}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.bank_account_number}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.branch_store_id}</td
-						>
-						<td class="border border-gray-300 px-4 py-2"
-							>{employee.status}</td
-						>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-		<ul></ul>
-	</section>
-{:else if $error}
-	<p class="text-red-400">{$error}</p>
-{:else}
-	<p>No employees found.</p>
-{/if}
-
-
-
--->
-
 <script>
 	import { onMount } from "svelte";
-	import { loadData } from "../../../../../utils/models";
-	import { employees } from "../../../../../stores/models";
+	import { employees, branch_store } from "../../../../../stores/models";
+	import { loadData, createModel } from "../../../../../utils/models";
+
 	import SearchBar from "../../../../../components/SearchBar.svelte";
 	import Table from "../../../../../components/Table.svelte";
+	import FormCreateUpdate from "../../../../../components/FormCreateUpdate.svelte";
+	import { fieldSchemas } from "../../../../../utils/fieldsSchema";
 
-	let filters = { id: null, status: null, all: true };
+	let filters = { id: null, status: null, name: "", all: true };
+	let showForm = false;
+	let employeeFields = [];
+
+	onMount(async () => {
+		await Promise.all([
+			loadData("employees", "all", filters),
+			loadData("branch_store", "all"),
+		]);
+
+		employeeFields = fieldSchemas.employees.map((field) => {
+			if (field.name === "branch_store_id") {
+				return {
+					...field,
+					options: $branch_store.map((b) => ({
+						id: b.id,
+						name: b.name,
+					})),
+				};
+			}
+			return field;
+		});
+	});
 
 	const handleSearch = async (event) => {
 		filters = event.detail.filters;
+		const isEmpty = Object.values(filters).every(
+			(value) => value === null || value === "",
+		);
 
-		if (filters.id) {
+		if (isEmpty) {
+			await loadData("employees", "all", filters);
+		} else if (filters.id) {
 			await loadData("employees", "byId", filters);
 		} else if (filters.status !== null && filters.status !== undefined) {
 			await loadData("employees", "byStatus", filters);
@@ -109,12 +51,34 @@
 		}
 	};
 
-	// Cargar productos al montar la vista
-	onMount(async () => {
-		await loadData("employees", "all", filters);
-	});
+	async function handleCreate(event) {
+		const data = event.detail;
 
-	// Definir columnas específicas para productos
+		if (
+			!data.name ||
+			!data.identification_card ||
+			!data.email ||
+			!data.salary ||
+			!data.branch_store_id
+		) {
+			alert("Por favor completa todos los campos obligatorios.");
+			return;
+		}
+
+		try {
+			await createModel("employees", data);
+			await loadData("employees", "all", filters);
+			showForm = false;
+		} catch (error) {
+			console.error("Error al crear empleado:", error);
+			alert("Error al crear empleado");
+		}
+	}
+
+	function openForm() {
+		showForm = true;
+	}
+
 	const columns = [
 		"id",
 		"identification_card",
@@ -129,14 +93,39 @@
 	];
 </script>
 
-<h5 class="right-20 absolute mt-16 font-medium">Employees</h5>
+<div class="relative w-auto h-screen pt-10">
+	{#if showForm}
+		<FormCreateUpdate
+			fields={employeeFields}
+			on:submit={handleCreate}
+			submitLabel="Crear empleado"
+			on:close={() => (showForm = false)}
+		/>
+	{/if}
 
-<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
-<SearchBar
-	bind:filters
-	on:search={handleSearch}
-	searchFields={["id", "status"]}
-/>
+	<div class=" w-auto border">
+		<h5 class="right-10 absolute mt-16 font-medium hidden xl:block">
+			Empleados
+		</h5>
+		<SearchBar
+			bind:filters
+			on:search={handleSearch}
+			searchFields={["id", "status"]}
+		/>
 
-<!-- Usar el componente Table con columnas y datos -->
-<Table {columns} data={$employees} />
+		<button
+			on:click={openForm}
+			class="fixed bottom-6 right-6 z-50 bg-green-600 text-white text-3xl w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-green-700 transition"
+			aria-label="Crear nuevo empleado"
+		>
+			+
+		</button>
+
+		<Table
+			{columns}
+			data={$employees}
+			resourceName="employees"
+			fieldSchema={employeeFields}
+		/>
+	</div>
+</div>

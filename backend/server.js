@@ -19,6 +19,9 @@ const customerInvoiceRoutes = require("./src/routes/customerInvoiceRoutes");
 const supplierInvoiceRoutes = require("./src/routes/supplierInvoicesRoutes");
 const invoiceContentSupplierRoutes = require("./src/routes/invoiceContentSupplierRoutes");
 const invoiceContentCustomerRoutes = require("./src/routes/invoiceContentCustomerRoutes");
+const cartRoutes = require("./src/routes/cartRoutes");
+const cartItemRoutes = require("./src/routes/cartItemRoutes");
+const salesRoutes = require("./src/routes/salesRoutes");
 
 // specific configuration CORS
 const corsOptions = {
@@ -50,6 +53,9 @@ app.use("/api/v1/products", productsRoutes); //ok
 app.use("/api/v1/customers", customersRoutes); //ok
 app.use("/api/v1/employees", employeesRoutes); //ok
 app.use("/api/v1/suppliers", supplierRoutes); //ok
+app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/cartItem", cartItemRoutes);
+app.use("/api/v1/sales", salesRoutes);
 
 // Routes authentication
 app.use("/api/v1/auth", routerAuth);
@@ -74,7 +80,3 @@ process.on("SIGINT", async () => {
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
-
-// // 1. Productos con stock bajo
-// // 2. Categorías más vendidas
-// // 3. Branch stores con más ventas

@@ -6,37 +6,64 @@ const {
 const queries = require("../utils/queries");
 
 const customersController = {
+  // http://localhost:3000/api/v1/customers?includeInvoices=true
   async getAll(req, res) {
     try {
-      const customers = await queries.findAll("customers");
+      const includeInvoices = req.query.includeInvoices === "true";
+
+      const customers = await queries.findAll("customers", {
+        include: includeInvoices
+          ? {
+              customer_invoice: {
+                include: {
+                  invoice_content_customer: {
+                    include: {
+                      products: true,
+                    },
+                  },
+                },
+              },
+            }
+          : {},
+      });
+      console.log("controller CUSTOMER: ", customers);
+
       res.status(200).json(customers);
     } catch (error) {
       console.log(`Error finding customers: ${error.message}`);
       res.status(500).json({ error: "Error finding customers" });
     }
   },
+
   async getById(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.params; // este es el identification_card
       const { includeInvoices } = req.query;
+
       const includeOptions =
         includeInvoices === "true"
           ? {
-              customer_invoice: true,
-              invoice_content_customer: true,
-              products: true,
+              customer_invoice: {
+                include: {
+                  invoice_content_customer: {
+                    include: {
+                      products: true,
+                    },
+                  },
+                },
+              },
             }
           : {};
 
-      const customers = await queries.findById(
-        "customers",
-        Number(id),
-        includeOptions
-      );
-      if (!customers) {
+      console.log("controller CUSTOMER includeOptions: ", includeOptions);
+
+      const customer = await queries.findById("customers", id, includeOptions);
+
+      if (!customer) {
         return res.status(404).json({ message: "Customer not found" });
       }
-      res.status(200).json(customers);
+
+      res.status(200).json(customer);
     } catch (error) {
       console.log(`Error fetching customer: ${error.message}`);
       res.status(500).json({ error: "Error fetching by id customer" });

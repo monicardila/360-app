@@ -5,7 +5,7 @@
 	const logout = async () => {
 		try {
 			const response = await fetch(
-				"http://localhost:3000/api/v1/auth/logout",
+				"http://localhost:3100/api/v1/auth/logout",
 				{
 					method: "POST",
 					credentials: "include",
@@ -23,62 +23,62 @@
 	};
 
 	const Menus = [
+		// {
+		// 	title: "Dashboard",
+		// 	link: "/app",
+		// 	icon: "ri-calendar-todo-line  ",
+		// },
 		{
-			title: "Dashboard",
-			link: "/app",
-			icon: "ri-calendar-todo-line  ",
-		},
-		{
-			title: "Billing",
+			title: "Caja registradora",
 			link: "/app/cashier",
 			icon: "ri-coins-line ",
 		},
 		{
-			title: "Products",
+			title: "Productos",
 			link: "/app/products",
 			icon: "ri-shopping-cart-line ",
 		},
 		{
-			title: "Clients",
+			title: "Clientes",
 			link: "/app/clients",
 			icon: "ri-user-search-line  ",
 		},
 		{
-			title: "Supplier .. v",
+			title: "Proveedores🔻",
 			icon: "ri-bus-fill  ",
 			submenu: true,
 			submenuItems: [
 				{
-					title: "Information",
+					title: "Información ",
 					link: "/app/suppliers/information",
 				},
-				{ title: "Orders", link: "/app/suppliers/orders" },
+				{ title: "Ordenes", link: "/app/suppliers/orders" },
 			],
 		},
 		{
-			title: "Reports .. v",
+			title: "Reportes🔻",
 			icon: "ri-folder-chart-line ",
 			submenu: true,
 			submenuItems: [
-				{ title: "Employees", link: "/app/reports/employees" },
-				{ title: "Analytics", link: "/app/reports/analytics" },
+				{ title: "Empleados", link: "/app/reports/employees" },
+				{ title: "Analitica", link: "/app/reports/analytics" },
 			],
 		},
 		{
-			title: "Settings .. v",
+			title: "Ajustes🔻",
 			icon: "ri-settings-3-fill",
 			submenu: true,
 			submenuItems: [
-				{ title: "Categories", link: "/app/settings/category" },
-				{ title: "Branch Store", link: "/app/settings/branchStore" },
-				{ title: "Permissions", link: "/app/settings/permissions" },
+				{ title: "Categorias", link: "/app/settings/category" },
+				{ title: "Sucursales", link: "/app/settings/branchStore" },
+				// { title: "Permissions", link: "/app/settings/permissions" },
 			],
 		},
-		{ title: "help", link: "/app/help", icon: "ri-question-fill" },
+		{ title: "Ayuda", link: "/app/help", icon: "ri-question-fill" },
 		{
-			title: "Logout",
+			title: "Cerrar sesión",
 			link: "#",
-			icon: "ri-logout-box-line",
+			icon: "ri-logout-box-line text-red-600",
 			action: logout,
 		},
 	];
@@ -127,13 +127,24 @@
 						: menu.submenu
 							? () => toggleSubmenu(index)
 							: null}
-					class={`block w-full hover:bg-slate-200 rounded-lg px-1 ${!isOpen && "pb-4"}`}
+					class={`group relative block w-full hover:bg-slate-200 rounded-lg px-1 ${!isOpen ? "pb-4" : ""}`}
 				>
-					<i class={`pl-1 ${menu.icon}`}></i><span
-						class={`text-base ${!isOpen ? "hidden" : "pl-4"} `}
+					<i class={`pl-1 ${menu.icon}`}></i>
+
+					<!-- Texto cuando el menú está abierto -->
+					<span class={`text-base ${!isOpen ? "hidden" : "pl-4"}`}
 						>{menu.title}</span
-					></a
-				>
+					>
+
+					<!-- Tooltip flotante cuando está cerrado -->
+					{#if !isOpen}
+						<span
+							class="absolute left-full ml-3 top-1/2 -translate-y-1/2 whitespace-nowrap bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50"
+						>
+							{menu.title}
+						</span>
+					{/if}
+				</a>
 			</div>
 			{#if menu.submenu && openSubmenu === index && isOpen}
 				<div class="pl-6 mt-4">
@@ -153,13 +164,13 @@
 	<div class="m-0 flex-1 w-full overflow-auto">
 		<!-- nav_bar -->
 		<div
-			class="fixed w-full top-0 right-0 left-0 h-[90px] shadow-md z-20 bg-white inline-flex"
+			class="fixed w-full top-0 right-0 left-0 h-[60px] shadow-md z-20 bg-white inline-flex"
 		>
 			<div
 				class=" absolute top-1/2 transform -translate-y-1/2 flex items-center right-10 space-x-20"
 			>
 				<!-- search general -->
-				<div class="relative w-80 h-10 mx-auto mt-8 mb-10 flex">
+				<div class="relative w-80 h-10 mx-auto mt-10 mb-10 flex">
 					<i
 						class="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-sky-600"
 					></i>
@@ -178,7 +189,9 @@
 		</div>
 
 		<!-- content -->
-		<main class=" p-10 h-screen bg-slate-100">
+		<main
+			class="bg-slate-100 min-h-[calc(100vh-60px)] overflow-auto min-w-[1000px]"
+		>
 			<slot />
 		</main>
 	</div>

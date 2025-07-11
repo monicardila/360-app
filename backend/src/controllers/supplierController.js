@@ -5,7 +5,11 @@ const { count } = require("./employeesController");
 const supplierController = {
   async getAll(req, res) {
     try {
-      const supplier = await queries.findAll("supplier");
+      const includeProducts = req.query.includeProducts === "true";
+      const supplier = await queries.findAll("supplier", {
+        include: includeProducts ? { products: true } : {},
+      });
+
       res.status(200).json(supplier);
     } catch (error) {
       console.log(`Error finding supplier: ${error.message}`);
@@ -19,7 +23,9 @@ const supplierController = {
       const { id } = req.params;
       const { includeProducts } = req.query;
       const includeOptions =
-        includeProducts === "true" ? { products: true } : {};
+        includeProducts === "true" || includeProducts === true
+          ? { products: true }
+          : {};
 
       const supplier = await queries.findById(
         "supplier",

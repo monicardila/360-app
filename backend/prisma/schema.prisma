@@ -4,8 +4,11 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// npx prisma migrate dev --name nombre-del-cambio
+
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -28,9 +31,10 @@ model Employees {
   orders Orders[]
   customer_invoice Customer_invoice[]
   supplier_invoice Supplier_invoices[]
+  cart Cart[]
 }
 
-enum Role{
+enum Role {
   USER
   ADMIN
 }
@@ -105,7 +109,8 @@ model Products {
   price          Decimal   @db.Decimal(10, 2)
   stock          Int       @default(1)
   status         Boolean  
-  deactivatedAt DateTime? // Fecha de desactivación
+  deactivatedAt  DateTime? // Fecha de desactivación
+  cartItem       CartItem[]
   orders         Orders[]
   invoice_content_customer Invoice_content_customer[]
   invoice_content_supplier Invoice_content_supplier[]
@@ -127,7 +132,10 @@ model Orders{
 model Customers {
   id Int @id @default(autoincrement())
   identification_card String @unique
+  type_of_document Type_of_document @default(CC)
   customer_invoice Customer_invoice[] // con una consulta para ver el historial
+  cart Cart[]
+
 }
 
 model Customer_invoice {
@@ -161,25 +169,32 @@ model Invoice_content_customer{
   total_price Decimal @db.Decimal(10,2)
 }
 
-enum PaymentMethod{
+enum PaymentMethod {
   EFECTIVO
   TARJETA_CREDITO
   TRANSFERENCIA
   OTRA
 }
 
-enum Payment_status{
+enum Payment_status {
   PAGADA
   PENDIENTE
   CANCELADA
 }
 
-enum Delivery_status{
+enum Delivery_status {
   APROBADA
   RECHAZADA
   RECIBIDA
   BORRADOR
   EN_ESPERA
+}
+
+enum Type_of_document {
+  CC
+  CE
+  TI
+  NIT
 }
 
 model BranchStore {
@@ -215,5 +230,26 @@ model Users{
   password String
   role String @default("user")
   brand String?
+  createdAt DateTime @default(now())
+}
+
+// Carrito de compras
+model Cart {
+  id Int @id @default(autoincrement())
+  employee_id Int?
+  employee Employees? @relation(fields: [employee_id], references: [id])
+  customer_id  Int
+  customer Customers @relation(fields: [customer_id], references: [id])
+  items CartItem[]
+  createdAt DateTime @default(now())
+}
+
+model CartItem {
+  id Int @id @default(autoincrement())
+  cart_id Int
+  cart Cart @relation(fields: [cart_id], references: [id])
+  product_id Int 
+  product Products @relation(fields: [product_id], references: [id])
+  quantity Int
   createdAt DateTime @default(now())
 }

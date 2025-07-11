@@ -10,8 +10,6 @@
 	let brand = "";
 	let error = null;
 
-	// ERROR EN ESTE ARCHIVO
-
 	async function register() {
 		if (password !== confirmPassword) {
 			error = "Password do not match";
@@ -20,7 +18,7 @@
 
 		try {
 			const response = await fetch(
-				"http://localhost:3000/api/v1/auth/register",
+				"http://localhost:3100/api/v1/auth/register",
 				{
 					method: "POST",
 					headers: {

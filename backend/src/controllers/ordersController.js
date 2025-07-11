@@ -5,11 +5,13 @@ const ordersController = {
   async getAll(req, res) {
     try {
       const { delivery_status } = req.query;
+      console.log("delivery_status recibido:", delivery_status);
       const filterOptions = {};
 
       if (delivery_status) {
         filterOptions.where = { delivery_status };
       }
+      console.log("filtors desde controlador: ", filterOptions);
 
       const orders = await queries.findAll("orders", filterOptions);
 
@@ -24,6 +26,7 @@ const ordersController = {
       res.status(500).json({ error: "Error finding orders" });
     }
   },
+
   async getById(req, res) {
     try {
       const { id } = req.params;

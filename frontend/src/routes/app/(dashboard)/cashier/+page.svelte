@@ -1,300 +1,397 @@
-<!-- para celular poner un footer con la camara
- en el normal hacer una calculadora y despues mejorarala con svlete -->
+<!-- COMPONENTE DE LA CAJA REGISTRADORA, RESPONSIVO -->
 
 <script>
 	import { auth, updateAuthFromCookie } from "../../../../stores/authStores";
 	import { onMount } from "svelte";
+	import { products } from "../../../../stores/models";
+	import { employees } from "../../../../stores/models";
+	import { branch_store } from "../../../../stores/models";
+	import { loadData } from "../../../../utils/models";
+	import SearchBar from "../../../../components/SearchBar.svelte";
+	import ProductTableCash from "../../../../components/ProductTableCash.svelte";
+	import ConfirmationCashRegister from "../../../../components/ConfirmationCashRegister.svelte";
 
+	let filters = { id: null, status: null, all: true }; // filtros tabla productos
 	let isAuthenticated;
 	let role;
+	let selectedProducts = []; // canasta de productos
+	// campos factura
+	let employee = "";
+	let typeDocument = "";
+	let idNumber = "";
+	let total = 0;
+	let date = new Date().toISOString().split("T")[0];
+	let branchStore = "";
+	let phone = "";
+	// estado componente de pago
+	let showConfirmation = false;
 
+	const handleSearch = async (event) => {
+		filters = event.detail.filters;
+
+		// Object.values(filters) = devuelve unicamente los valores de ese objeto ejemplo : [null, "", ""]
+		// .every() = revisa si todos los elementos del arreglo cumplen con la condicion
+		const isEmpty = Object.values(filters).every(
+			(value) => value === null || value === "",
+		);
+
+		if (isEmpty) {
+			await loadData("products", "all", filters);
+		} else if (filters.id) {
+			await loadData("products", "byId", filters);
+		} else if (filters.status !== null && filters.status !== undefined) {
+			await loadData("products", "byStatus", filters);
+		} else if (filters.name) {
+			await loadData("products", "byName", filters);
+		} else {
+			await loadData("products", "all", filters);
+		}
+	};
+
+	// Cargar al montar la vista
+	onMount(async () => {
+		await loadData("products", "all", filters);
+		await loadData("employees", "all", {});
+		await loadData("branch_store", "all", {});
+	});
+
+	// Definir columnas específicas para productos
+	const columns = ["id", "name", "description", "price", "stock"];
+
+	// Autenticacion
 	$: auth.subscribe(($auth) => {
 		isAuthenticated = $auth.isAuthenticated;
 		role = $auth.role;
 	});
 
-	// Suscríbete al store para obtener el estado actualizado
-
+	// Se suscríbe al store para obtener el estado actualizado
 	onMount(() => {
 		updateAuthFromCookie(); // Fuerza la actualización del store al cargar la vista
 	});
+
+	function addProduct(product) {
+		const cleanPrice = Number(product.price ?? 0);
+
+		const index = selectedProducts.findIndex((p) => p.id === product.id);
+		if (index !== -1) {
+			selectedProducts[index].quantity += 1;
+			selectedProducts = [...selectedProducts];
+		} else {
+			selectedProducts = [
+				...selectedProducts,
+				{ ...product, price: cleanPrice, quantity: 1 },
+			];
+		}
+	}
+
+	function incrementQuantity(id) {
+		const index = selectedProducts.findIndex((p) => p.id === id);
+		if (index !== -1) {
+			selectedProducts[index].quantity += 1;
+			selectedProducts = [...selectedProducts];
+		}
+	}
+
+	function decrementQuantity(id) {
+		const index = selectedProducts.findIndex((p) => p.id === id);
+		if (index !== -1 && selectedProducts[index].quantity > 1) {
+			// sí existe ese producto, podemos modificarlo
+			selectedProducts[index].quantity -= 1;
+			selectedProducts = [...selectedProducts];
+		}
+		if (quantity <= 0) {
+			quantity = 0;
+		}
+	}
+
+	function removeProduct(id) {
+		selectedProducts = selectedProducts.filter((p) => p.id !== id);
+	}
+
+	// acc: acumulador inicia en 0
+	// 0, valor inicial
+	// reduce() funcion que reduce todo un arreglo a un solo valor
+	function calculateTotal() {
+		console.log("Calculando desde función. Productos:", selectedProducts);
+		return selectedProducts.reduce((acc, p) => {
+			const price = Number(p.price ?? 0);
+			const quantity = Number(p.quantity ?? 0);
+			const subtotal = price * quantity;
+			console.log(
+				`Producto: ${p.name}, Precio: ${price}, Cantidad: ${quantity}, Subtotal: ${subtotal}`,
+			);
+			return acc + subtotal;
+		}, 0);
+	}
+
+	$: if (selectedProducts) {
+		total = calculateTotal();
+	}
+
+	$: console.log("TOTAL: ", total);
+	console.log("Total con la funcion: ", calculateTotal());
+
+	$: console.log("canasta: ", selectedProducts);
+
+	// Estado componente de registro de pago
+	function openConfirmation() {
+		showConfirmation = true;
+	}
+
+	// confirmaciòn campos factura
+	$: isFormValid =
+		!!employee &&
+		!!branchStore &&
+		!!typeDocument &&
+		!!idNumber &&
+		!!date &&
+		selectedProducts.length > 0;
 </script>
 
-<section>
-	<div class="">
-		<p class=" mt-12 bg-sky-700 text-white p-2 rounded-md">
-			Punto de venta
-		</p>
-	</div>
-</section>
 {#if role === "admin"}
-	<!-- DEBERIA APARECER SOLO ADMIN------------------------------------------------------------------------ -->
-	<section>
+	<section class="min-h-screen flex items-center justify-center pt-14">
 		<div
-			class=" p-10 w-full mx-auto relative flex flex-wrap gap-2 text-sm justify-center"
+			class="w-full mx-auto relative flex flex-wrap gap-2 text-sm justify-center"
 		>
 			<!-- Contenedor Izquierdo -->
 			<div
-				class="hidden xl:block max-w-sm bg-white p-10 flex-grow drop-shadow-lg border border-gray-200"
+				class="hidden xl:block max-w-lg bg-white flex-grow drop-shadow-lg border border-gray-200 max-h-[440px] top-0"
 			>
-				<h1 class="text-3xl font-bold border-b border-slate-800 pb-9">
-					Inventario
-				</h1>
 				<!-- tabla -->
-				<table class="table-fixed w-full">
-					<thead>
-						<tr>
-							<th class="pb-2 pt-4 pr-10">#</th>
-							<th class="pb-2 pt-4 pr-10">Producto</th>
-							<th class="pb-2 pt-4 pr-10">Cantidad</th>
-							<th class="pb-2 pt-4 pr-20">Precio</th>
-							<th class="pb-2 pt-4 pr-20">Total</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">1</td>
-							<td class="pb-2 pt-2 pr-10">Leche</td>
-							<td class="pb-2 pt-2 pr-10">12</td>
-							<td class="pb-2 pt-2 pr-20">4.500</td>
-							<td class="pb-2 pt-2 pr-20">54.000</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">2</td>
-							<td class="pb-2 pt-2 pr-10">Verduras</td>
-							<td class="pb-2 pt-2 pr-10">1</td>
-							<td class="pb-2 pt-2 pr-20">2.000</td>
-							<td class="pb-2 pt-2 pr-20">2.000</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-						<tr>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-10">Gomas</td>
-							<td class="pb-2 pt-2 pr-10">3</td>
-							<td class="pb-2 pt-2 pr-20">2.500</td>
-							<td class="pb-2 pt-2 pr-20">7.500</td>
-						</tr>
-					</tbody>
-				</table>
+				<SearchBar
+					bind:filters
+					on:search={handleSearch}
+					searchFields={["id"]}
+				/>
+
+				<div class=" ">
+					<ProductTableCash
+						{columns}
+						data={$products}
+						on:select={(event) => addProduct(event.detail)}
+					/>
+				</div>
 			</div>
 
 			<!-- Contenedor Central -->
 			<div
-				class="hidden md:block mx-auto xl:mx-2 min-w-[250px] max-w-4xl bg-white p-8 shadow-md flex-grow mt-0 drop-shadow-lg border border-gray-200"
+				class="hidden md:block mx-auto xl:mx-2 min-w-[150px] max-w-2xl bg-white p-8 shadow-md flex-grow mt-0 drop-shadow-lg border border-gray-200 h-[636px]"
 			>
-				<h1 class="text-3xl font-bold pb-9">Orden de venta</h1>
-				<div class=" relative">
-					<form class="absolute right-0 bottom-14">
-						<label class=" right-80 absolute">
-							Empleado
-							<select
-								name="type-empleado"
-								aria-label="Empleado"
-								class="border border-black absolute w-48 pl-2 ml-4"
-							>
-								<option value="opcion"> Monica Ardila</option>
-								<option value="opcion"> Tomas Panqueva</option>
-								<option value="opcion">
-									Alexandra Moreno</option
-								>
-								<option value="opcion"> Felipe Manrique</option>
-							</select>
-						</label>
-					</form>
-				</div>
-
+				<h1 class="text-3xl font-bold pb-3">Orden de venta</h1>
 				<div class="relative">
 					<fieldset>
-						<legend>INFORMACIÓN CLIENTE</legend>
+						<legend class="text-gray-400 text-xs"
+							>INFORMACIÓN CLIENTE</legend
+						>
 						<div class="pl-5 pt-5 pb-3">
-							<label
-								>Cliente
-								<input
-									type="text"
-									placeholder="John Doe"
-									required
-									class="border border-gray-800 w-42 pl-2 ml-6"
-								/>
-							</label>
-						</div>
-						<div class="ml-72 top-10 absolute">
-							<label
-								>Fecha
-								<input
-									type="date"
-									required
-									class="border border-gray-800 w-48 pl-2 ml-10"
-								/>
-							</label>
-						</div>
-						<div class="pl-5">
-							<label
-								>Tipo
+							<label>
+								<span class="font-medium">Empleado</span>
 								<select
-									name="type-id"
-									aria-label="Tipo de identificación"
-									class="border border-gray-800 ml-10"
+									bind:value={employee}
+									required
+									name="type-empleado"
+									aria-label="Empleado"
+									class=" rounded-xl border-gray-400 border p-1 absolute w-48 pl-2 ml-4"
 								>
-									<option value="opcion">
-										Cedula de ciudadania</option
+									<option value="" disabled
+										>Selecciona un empleado</option
 									>
-									<option value="opcion">
-										Cedula de extrangeria/option>
-									</option><option value="opcion">
-										Targeta de identificación</option
-									>
-									<option value="opcion"> Nit</option>
+									{#each $employees as emp}
+										<option value={emp.id}
+											>{emp.name}</option
+										>
+									{/each}
 								</select>
 							</label>
 						</div>
-						<div class=" ml-96 top-20 absolute">
+						<div class="right-2 top-8 absolute">
 							<label
-								>Numero
+								><span class=" font-medium">Fecha</span>
+								<input
+									type="date"
+									bind:value={date}
+									required
+									class="rounded-xl border-gray-400 border p-1 w-48 pl-2 ml-10"
+								/>
+							</label>
+						</div>
+						<div class="pl-5 pb-3">
+							<label>
+								<span class="font-medium">Sucursales</span>
+								<select
+									bind:value={branchStore}
+									required
+									name="type-empleado"
+									aria-label="Empleado"
+									class=" rounded-xl border-gray-400 border p-1 absolute w-48 pl-2 ml-4"
+								>
+									<option value="" disabled selected
+										>Selecciona una sucursal</option
+									>
+									{#each $branch_store as bs}
+										<option value={bs.id}
+											>{bs.name} - {bs.address}</option
+										>
+									{/each}
+								</select>
+							</label>
+						</div>
+						<div class="right-3 absolute">
+							<label
+								><span class=" font-medium">Numero</span>
 								<input
 									type="number"
-									placeholder="7912394"
+									placeholder="3195254.."
 									required
-									class="border border-gray-800 w-32 pl-2 ml-6"
+									bind:value={idNumber}
+									class="rounded-xl border-gray-400 border p-1 w-48 pl-2 ml-6"
+								/>
+							</label>
+						</div>
+
+						<div class="pl-5">
+							<label
+								><span class=" font-medium">Tipo</span>
+								<select
+									name="type-id"
+									aria-label="Tipo de identificación"
+									class="rounded-xl border-gray-400 border p-1 ml-12 w-48"
+									bind:value={typeDocument}
+									required
+								>
+									<option value="" disabled selected
+										>Tipo de documento</option
+									>
+									<option value="CC"
+										>Cédula de ciudadanía</option
+									>
+									<option value="CE"
+										>Cédula de extranjería</option
+									>
+									<option value="TI"
+										>Tarjeta de identidad</option
+									>
+									<option value="NIT">NIT</option>
+								</select>
+							</label>
+						</div>
+						<div class="right-3 top-[68px] absolute">
+							<label
+								><span class=" font-medium">Telefono</span>
+								<input
+									type="number"
+									placeholder="123456"
+									required
+									bind:value={phone}
+									class="rounded-xl border-gray-400 border p-1 w-48 pl-2 ml-6"
 								/>
 							</label>
 						</div>
 					</fieldset>
 				</div>
-				<!-- tabla -->
-				<div class="border border-black mt-5 pb-3">
-					<table class="table-fixed w-full ml-10">
+				<!-- tabla produtos por cliente -->
+				<div
+					class="border border-black mt-5 pb-3 overflow-scroll h-[280px]"
+				>
+					<table class="table-fixed w-full">
 						<thead>
-							<tr>
-								<th class="pb-10 pt-5 pr-10">#</th>
-								<th class="pb-10 pt-5 pr-10">Producto</th>
-								<th class="pb-10 pt-5 pr-10">Cantidad</th>
-								<th class="pb-10 pt-5 pr-20">Precio</th>
-								<th class="pb-10 pt-5 pr-20">Total</th>
+							<tr class="">
+								<th class="pl-3 pb-4 pt-5 pr-10">#</th>
+								<th class="pl-3 pb-4 pt-5 pr-10">Producto</th>
+								<th class="pl-3 pb-4 pt-5 pr-10">Cantidad</th>
+								<th class="pl-3 pb-4 pt-5 pr-20">Precio</th>
+								<th class="pl-3 pb-4 pt-5 pr-20">Total</th>
+								<th class="pl-3 pb-4 pt-5 pr-20">Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-10">Gomas</td>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-20">2.500</td>
-								<td class="pb-2 pt-2 pr-20">7.500</td>
-							</tr>
-							<tr>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-10">Gomas</td>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-20">2.500</td>
-								<td class="pb-2 pt-2 pr-20">7.500</td>
-							</tr>
-							<tr>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-10">Gomas</td>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-20">2.500</td>
-								<td class="pb-2 pt-2 pr-20">7.500</td>
-							</tr>
-							<tr>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-10">Gomas</td>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-20">2.500</td>
-								<td class="pb-2 pt-2 pr-20">7.500</td>
-							</tr>
-							<tr>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-10">Gomas</td>
-								<td class="pb-2 pt-2 pr-10">3</td>
-								<td class="pb-2 pt-2 pr-20">2.500</td>
-								<td class="pb-2 pt-2 pr-20">7.500</td>
-							</tr>
+							{#each selectedProducts as product, i}
+								<tr class="border border-slate-00">
+									<td class="w-1/12 pb-2 pt-2 text-center"
+										>{i + 1}</td
+									>
+									<td class="w-3/12 pb-2 pt-2"
+										>{product.name}</td
+									>
+									<td class="w-2/12 pb-2 pt-2">
+										<div
+											class="flex items-center justify-center gap-2"
+										>
+											<button
+												type="button"
+												class="bg-gray-200 px-2"
+												on:click={() =>
+													decrementQuantity(
+														product.id,
+													)}
+											>
+												-
+											</button>
+											<span>{product.quantity}</span>
+											<button
+												type="button"
+												class="bg-gray-200 px-2"
+												on:click={() =>
+													incrementQuantity(
+														product.id,
+													)}
+											>
+												+
+											</button>
+										</div>
+									</td>
+									<td class="w-2/12 pb-2 pt-2 text-center"
+										>${product.price}</td
+									>
+									<td class="w-3/12 pb-2 pt-2 text-center">
+										${(
+											product.quantity *
+											(product.price ?? 0)
+										).toFixed(2)}
+									</td>
+									<td class="w-1/12 pb-2 pt-2 text-center">
+										<button
+											type="button"
+											class="text-red-900 font-medium"
+											on:click={() =>
+												removeProduct(product.id)}
+										>
+											X
+										</button>
+									</td>
+								</tr>
+							{/each}
 						</tbody>
 					</table>
 				</div>
-				<div class="mt-28 mb-8 relative">
-					<h3 class="text-5xl font-bold">Total: $ 20.4</h3>
+				<div class="mt-4 relative">
+					<h3 class="text-4xl font-bold">
+						Total: ${total.toFixed(2) ?? "null"}
+					</h3>
 					<button
-						class=" bg-black text-xl text-white py-6 px-20 rounded-2xl absolute right-0 bottom-1 mx-1"
-						>Pagar</button
+						class=" bg-green-800 font-bold text-xl text-white py-2 px-4 rounded-2xl absolute right-0 bottom-1 mx-1 disabled:bg-gray-400"
+						on:click={openConfirmation}
+						disabled={!isFormValid}>Pagar</button
 					>
 				</div>
 			</div>
+
+			<!-- modal registro de pago -->
+
+			{#if showConfirmation}
+				<ConfirmationCashRegister
+					{employee}
+					{typeDocument}
+					{idNumber}
+					{date}
+					{total}
+					{selectedProducts}
+					{branchStore}
+					{phone}
+					on:close={() => (showConfirmation = false)}
+				/>
+			{/if}
+
 			<!-- view mobiles -->
 			<div class="w-full container md:hidden">
 				<h3
@@ -355,7 +452,6 @@
 		</div>
 	</section>
 	<!-- temporary-div -->
-	<div class="h-[200px]"></div>
 	<footer class="md:hidden text-center">
 		<button
 			><i class="ri-qr-code-line text-secondary text-6xl my-4 mx-6"

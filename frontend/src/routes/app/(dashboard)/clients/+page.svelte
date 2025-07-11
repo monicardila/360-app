@@ -10,14 +10,31 @@
 	const handleSearch = async (event) => {
 		filters = event.detail.filters;
 
-		if (filters.id) {
-			await loadData("customer", "byId", filters);
+		// Object.values(filters) = devuelve unicamente los valores de ese objeto ejemplo : [null, "", ""]
+		// .every() = revisa si todos los elementos del arreglo cumplen con la condicion
+		const isEmpty = Object.values(filters).every(
+			(value) => value === null || value === "",
+		);
+
+		if (isEmpty) {
+			await loadData("customer", "all", { includeInvoices: true });
+		} else if (filters.id) {
+			await loadData("customer", "byId", {
+				...filters,
+				includeInvoices: true,
+			});
 		} else if (filters.status !== null && filters.status !== undefined) {
-			await loadData("customer", "byStatus", filters);
+			await loadData("customer", "byStatus", {
+				...filters,
+				includeInvoices: true,
+			});
 		} else if (filters.name) {
-			await loadData("customer", "byName", filters);
+			await loadData("customer", "byName", {
+				...filters,
+				includeInvoices: true,
+			});
 		} else {
-			await loadData("customer", "all", filters);
+			await loadData("customer", "all", { includeInvoices: true });
 		}
 	};
 
@@ -30,10 +47,19 @@
 	const columns = ["id", "identification_card", "customer_invoice"];
 </script>
 
-<h5 class="right-20 absolute mt-16 font-medium">Customer</h5>
+<div class=" h-screen pt-10">
+	<main class="bg-slate-100 overflow-auto">
+		<h5 class="right-20 absolute mt-16 font-medium hidden md:block">
+			Clientes
+		</h5>
+		<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
+		<SearchBar
+			bind:filters
+			on:search={handleSearch}
+			searchFields={["id"]}
+		/>
 
-<!-- MODIFICAR POR CADA VISTA PARA LOS FILTROS PESONALIZADOS-->
-<SearchBar bind:filters on:search={handleSearch} searchFields={["id"]} />
-
-<!-- Usar el componente Table con columnas y datos -->
-<Table {columns} data={$customer} />
+		<!-- Usar el componente Table con columnas y datos -->
+		<Table {columns} data={$customer} hideActions={true} />
+	</main>
+</div>
